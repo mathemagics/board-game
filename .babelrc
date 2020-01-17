@@ -1,0 +1,23 @@
+{
+  "presets": [
+    [
+      "@babel/preset-env", {
+        "shippedProposals": true,
+        "targets": {
+          "node": "current"
+        }
+      }
+    ],
+    "@babel/preset-react"
+  ],
+  "plugins": [
+    "@babel/plugin-proposal-class-properties",
+    "babel-plugin-styled-components",
+    "react-hot-loader/babel",
+    [
+      "module-resolver", {
+        "root": ["./src"]
+      }
+    ]
+  ]
+}

@@ -1,6 +1,8 @@
 const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+
 
 module.exports = {
   entry: {
@@ -10,7 +12,7 @@ module.exports = {
     rules: [
       {
         test: /\.tsx?$/,
-        use: 'ts-loader',
+        use: 'babel-loader',
         exclude: /node_modules/,
       },
     ],
@@ -24,6 +26,7 @@ module.exports = {
       template: './src/index.html',
       title: 'Root Beyond'
     }),
+    new ForkTsCheckerWebpackPlugin(),
   ],
   output: {
     filename: '[name].bundle.js',
