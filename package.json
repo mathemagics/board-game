@@ -1,0 +1,9 @@
+{
+  "name": "root-beyond",
+  "version": "0.0.1",
+  "description": "Companion App for the Root Role Playing Game",
+  "main": "index.js",
+  "repository": "git@github.com:mathemagics/root-beyond.git",
+  "author": "higgsbison@gmail.com",
+  "license": "MIT"
+}
