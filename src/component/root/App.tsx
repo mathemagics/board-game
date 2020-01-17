@@ -1,5 +1,5 @@
 import * as React from "react";
 
-export const App = () => (
+export default () => (
   <div>Yellllllow</div>
 );
