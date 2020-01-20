@@ -10,5 +10,13 @@
   ],
   "rules":{
     "object-curly-spacing": ["error", "never"]
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "paths": ["./src"]
+      },
+      "babel-module": {}
+    }
   }
 }
