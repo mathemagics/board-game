@@ -11,7 +11,9 @@
   "rules":{
     "object-curly-spacing": ["error", "never"],
     "brace-style": [2, "1tbs", { "allowSingleLine": true }],
-    "indent": ["error", 2]
+    "indent": ["error", 2],
+    "max-len": ["error", { "code": 90 }],
+    "semi": ["error", "always"]
   },
   "settings": {
     "import/resolver": {
