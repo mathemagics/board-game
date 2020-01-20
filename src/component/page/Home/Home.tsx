@@ -1,5 +1,5 @@
 import * as React from 'react';
 
-export default ({children}: {children: React.ReactNode}) => (
+export default () => (
   <div>Home</div>
 );
