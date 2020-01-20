@@ -16,10 +16,11 @@ export default () => (
   <ApolloProvider client={client}>
     <Router>
       <Switch>
-        <Route path="/">
+        {/* TODO: Routes */}
+        <Route path="/temporary">
           <Home />
         </Route>
-        <Route path="/character">
+        <Route path="/">
           <Character />
         </Route>
       </Switch>
