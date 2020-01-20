@@ -9,7 +9,9 @@
     "prettier/@typescript-eslint"
   ],
   "rules":{
-    "object-curly-spacing": ["error", "never"]
+    "object-curly-spacing": ["error", "never"],
+    "brace-style": [2, "1tbs", { "allowSingleLine": true }],
+    "indent": ["error", 2]
   },
   "settings": {
     "import/resolver": {
