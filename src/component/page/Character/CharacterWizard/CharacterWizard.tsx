@@ -1,47 +1,59 @@
 import * as React from 'react';
-import {Form, Input} from '@rocketseat/unform';
-import {useMutation} from '@apollo/react-hooks';
+import {Form} from '@rocketseat/unform';
 
-import {UPDATE_SPECIES, UPDATE_NAME} from './query';
+import CharacterBasic from './CharacterBasic';
+
+// TODO: Build pages
+const Page1 = () => (<div>Playbook</div>);
+const Page2 = () => (<div>Page2</div>);
+const Page3 = () => (<div>Page3</div>);
+
+// TODO: import pageData
+const pageData = [
+  {pageNumber: 0, component: CharacterBasic, label: 'Basics'},
+  {pageNumber: 1, component: Page1, label: 'page 1'},
+  {pageNumber: 2, component: Page2, label: 'page 2'},
+  {pageNumber: 3, component: Page3, label: 'Appearance'},
+];
 
 export default () => {
-  const [speciesMutation, {data: speciesData}] = useMutation(UPDATE_SPECIES);
-  const [nameMutation, {data: nameData}] = useMutation(UPDATE_NAME);
-
-  const updateSpecies = (species: string) => {
-    speciesMutation({variables: {species}});
-  };
-
-  const updateName = (name: string) => {
-    nameMutation({variables: {name}});
-  };
-
-  console.log('species', speciesData);
-  console.log('name', nameData);
+  const [currentPage, setCurrentPage] = React.useState(0);
+  const currentPageData = React.useMemo(
+    () => pageData.find((page) => page.pageNumber === currentPage),
+    [currentPage],
+  );
+  const CurrentComponent = currentPageData.component;
 
   return (
     <Form onSubmit={() => {}}>
       <div>
-        <div>name</div>
-        <Input
-          name="name"
-          onBlur={
-            (e: React.FormEvent<HTMLInputElement>) => (
-              updateName((e.target as HTMLInputElement).value)
-            )
-          }
-        />
+        <div>
+          {pageData.map(({label, pageNumber}) => (
+            <button
+              key={pageNumber}
+              type="button"
+              onClick={() => setCurrentPage(pageNumber)}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+        <div>
+          <div>{currentPageData.label}</div>
+          <CurrentComponent />
+        </div>
       </div>
       <div>
-        <div>species</div>
-        <Input
-          name="species"
-          onBlur={
-            (e: React.FormEvent<HTMLInputElement>) => (
-              updateSpecies((e.target as HTMLInputElement).value)
-            )
-          }
-        />
+        {currentPage !== 0 && (
+          <button type="button" onClick={() => setCurrentPage(currentPage - 1)}>
+            back
+          </button>
+        )}
+        {(currentPage !== pageData.length - 1) && (
+          <button type="button" onClick={() => setCurrentPage(currentPage + 1)}>
+            next
+          </button>
+        )}
       </div>
     </Form>
   );
