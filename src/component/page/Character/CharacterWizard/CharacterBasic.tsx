@@ -4,34 +4,37 @@ import {useMutation} from '@apollo/react-hooks';
 
 import {UPDATE_SPECIES, UPDATE_NAME, UPDATE_PLAYBOOK} from './mutation';
 
-import {OptionType} from './type';
+import {OptionType, CharacterType} from './type';
 
 // TODO put initial values types somewhere useful
 interface CharacterBasicProps {
   initialValues: {
+    character: CharacterType
     species: OptionType[]
     playbooks: OptionType[]
   }
 }
 
 export default ({
-  initialValues: {species: speciesOptions, playbooks: playbookOptions},
+  initialValues: {character, species: speciesOptions, playbooks: playbookOptions},
 }: CharacterBasicProps) => {
   // TODO: Handle mutation updates. probably optimistically.
   const [speciesMutation, {data: _speciesData}] = useMutation(UPDATE_SPECIES);
   const [nameMutation, {data: _nameData}] = useMutation(UPDATE_NAME);
   const [playbookMutation, {data: _playbookData}] = useMutation(UPDATE_PLAYBOOK);
 
+  const characterID = character.id;
+
   const updateSpecies = (species: string) => {
-    speciesMutation({variables: {species}});
+    speciesMutation({variables: {id: characterID, species}});
   };
 
   const updateName = (name: string) => {
-    nameMutation({variables: {name}});
+    nameMutation({variables: {id: characterID, name}});
   };
 
   const updatePlaybook = (playbook: string) => {
-    playbookMutation({variables: {playbook}});
+    playbookMutation({variables: {id: characterID, playbook}});
   };
 
   return (

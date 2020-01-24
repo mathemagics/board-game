@@ -1,24 +1,23 @@
 import * as React from 'react';
 import {Form} from '@rocketseat/unform';
-import {useQuery} from '@apollo/react-hooks';
+import {useQuery, useMutation} from '@apollo/react-hooks';
 
 import CharacterBasic from './CharacterBasic';
 
 import {GET_SPECIES, GET_PLAYBOOKS} from './query';
+import {CREATE_CHARACTER} from './mutation';
 
-import {SpeciesType} from './type';
+import {SpeciesType, PlaybookType} from './type';
 
 // TODO: Build pages
-const Page1 = () => (<div>Playbook</div>);
 const Page2 = () => (<div>Page2</div>);
 const Page3 = () => (<div>Page3</div>);
 
 // TODO: import pageData
 const pageData = [
   {pageNumber: 0, component: CharacterBasic, label: 'Basics'},
-  {pageNumber: 1, component: Page1, label: 'page 1'},
-  {pageNumber: 2, component: Page2, label: 'page 2'},
-  {pageNumber: 3, component: Page3, label: 'Appearance'},
+  {pageNumber: 1, component: Page2, label: 'page 2'},
+  {pageNumber: 2, component: Page3, label: 'Appearance'},
 ];
 
 export default () => {
@@ -48,16 +47,30 @@ export default () => {
     data: playbookData,
   } = useQuery(GET_PLAYBOOKS);
 
+  // TODO: make this work
   const playbookOptions = playbookData && playbookData.listPlaybooks.map(
-    ({name}: SpeciesType) => ({id: name, title: name}),
+    ({id, name}: PlaybookType) => ({id, title: name}),
   );
-  console.log('species data', speciesData);
-  console.log('playbook data', playbookData);
 
-  const loading = speciesLoading || playbookLoading;
+  const [
+    createCharacterMutation,
+    {
+      data: characterData,
+      loading: characterLoading,
+    },
+  ] = useMutation(CREATE_CHARACTER);
+
+  React.useEffect(() => {
+    createCharacterMutation();
+  }, []);
+
+  const character = characterData && characterData.createCharacter;
+
+
+  const loading = speciesLoading || playbookLoading || characterLoading;
 
   // TODO: handle building initialValues in separate file
-  const initialValues = {species: speciesOptions, playbooks: playbookOptions};
+  const initialValues = {character, species: speciesOptions, playbooks: playbookOptions};
   const CurrentComponent = currentPageData.component;
 
   return (
