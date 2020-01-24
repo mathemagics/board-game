@@ -1,1 +1,1 @@
-export {default} from './CharacterWizard';
+export {default} from './CharacterRouter';
