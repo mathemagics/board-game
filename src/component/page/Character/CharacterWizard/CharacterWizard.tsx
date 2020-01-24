@@ -4,7 +4,7 @@ import {useQuery} from '@apollo/react-hooks';
 
 import CharacterBasic from './CharacterBasic';
 
-import {GET_SPECIES} from './query';
+import {GET_SPECIES, GET_PLAYBOOKS} from './query';
 
 import {SpeciesType} from './type';
 
@@ -31,12 +31,33 @@ export default () => {
   // TODO: This will pass data into the wizard.
   // TODO: Probably figure out all initial values here
   // TODO: Handle errors.
-  const {loading, error: _error, data} = useQuery(GET_SPECIES);
-  const species = data && data.listSpecies.map(
+  // TODO: Look into batching this
+  const {
+    loading: speciesLoading,
+    error: _speciesError,
+    data: speciesData,
+  } = useQuery(GET_SPECIES);
+
+  const speciesOptions = speciesData && speciesData.listSpecies.map(
     ({name}: SpeciesType) => ({id: name, title: name}),
   );
-  console.log('species data', species);
-  const initialValues = {species};
+
+  const {
+    loading: playbookLoading,
+    error: _playBookError,
+    data: playbookData,
+  } = useQuery(GET_PLAYBOOKS);
+
+  const playbookOptions = playbookData && playbookData.listPlaybooks.map(
+    ({name}: SpeciesType) => ({id: name, title: name}),
+  );
+  console.log('species data', speciesData);
+  console.log('playbook data', playbookData);
+
+  const loading = speciesLoading || playbookLoading;
+
+  // TODO: handle building initialValues in separate file
+  const initialValues = {species: speciesOptions, playbooks: playbookOptions};
   const CurrentComponent = currentPageData.component;
 
   return (

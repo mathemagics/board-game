@@ -17,3 +17,12 @@ export const UPDATE_NAME = gql`
     }
   }
 `;
+
+// TODO: Add IDs
+export const UPDATE_PLAYBOOK = gql`
+  mutation UpdateCharacter($id: String!) {
+    playbook(id: $id) {
+      name
+    }
+  }
+`;

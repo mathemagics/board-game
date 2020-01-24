@@ -7,3 +7,11 @@ export const GET_SPECIES = gql`
     }
   }
 `;
+
+export const GET_PLAYBOOKS = gql`
+  {
+    listPlaybooks {
+      name
+    }
+  }
+`;
