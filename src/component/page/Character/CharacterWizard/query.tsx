@@ -12,6 +12,7 @@ export const GET_PLAYBOOKS = gql`
   {
     listPlaybooks {
       name
+      id
     }
   }
 `;
