@@ -4,18 +4,17 @@ import {useMutation} from '@apollo/react-hooks';
 
 import {UPDATE_SPECIES, UPDATE_NAME} from './mutation';
 
-// TODO: Query species.
-const speciesOptions = [
-  {id: 'raccoon', title: 'Raccoon'},
-  {id: 'bird', title: 'Bird'},
-  {id: 'badger', title: 'Badger'},
-];
+// TODO put initial values types somewhere useful
+interface CharacterBasicProps {
+  initialValues: {
+    species: {id: string, title: string}[]
+  }
+}
 
-
-export default () => {
-  const [speciesMutation, {data: speciesData}] = useMutation(UPDATE_SPECIES);
-  const [nameMutation, {data: nameData}] = useMutation(UPDATE_NAME);
-
+export default ({initialValues: {species: speciesOptions}}: CharacterBasicProps) => {
+  // TODO: Handle mutation updates. probably optimistically.
+  const [speciesMutation, {data: _speciesData}] = useMutation(UPDATE_SPECIES);
+  const [nameMutation, {data: _nameData}] = useMutation(UPDATE_NAME);
   const updateSpecies = (species: string) => {
     speciesMutation({variables: {species}});
   };
@@ -23,9 +22,6 @@ export default () => {
   const updateName = (name: string) => {
     nameMutation({variables: {name}});
   };
-
-  console.log('species', speciesData);
-  console.log('name', nameData);
 
   return (
     <>
@@ -40,19 +36,18 @@ export default () => {
           }
         />
       </div>
+
       <div>
         <div>species</div>
-        <Input
+        <Select
           name="species"
+          options={speciesOptions}
           onBlur={
-            (e: React.FormEvent<HTMLInputElement>) => (
-              updateSpecies((e.target as HTMLInputElement).value)
+            (e: React.FormEvent<HTMLSelectElement>) => (
+              updateSpecies((e.target as HTMLSelectElement).value)
             )
           }
         />
-      </div>
-      <div>
-        <Select name="playbook" options={speciesOptions} />
       </div>
     </>
   );

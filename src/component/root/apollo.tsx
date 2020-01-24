@@ -3,8 +3,12 @@ import {InMemoryCache, NormalizedCacheObject} from 'apollo-cache-inmemory';
 import {HttpLink} from 'apollo-link-http';
 
 const cache = new InMemoryCache();
+// TODO Environment variable to determine this
 const link = new HttpLink({
-  uri: 'http://localhost:4000/',
+  uri: 'https://root-beyond-api.herokuapp.com/api',
+  fetchOptions: {
+    mode: 'cors',
+  },
 });
 
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
