@@ -17,10 +17,10 @@ export default () => (
     <Router>
       <Switch>
         {/* TODO: Routes */}
-        <Route path="/temporary">
+        <Route exact path="/">
           <Home />
         </Route>
-        <Route path="/">
+        <Route path="/character">
           <Character />
         </Route>
       </Switch>
