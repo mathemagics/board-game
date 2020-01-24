@@ -1,7 +1,12 @@
 import * as React from 'react';
 import {Form} from '@rocketseat/unform';
+import {useQuery} from '@apollo/react-hooks';
 
 import CharacterBasic from './CharacterBasic';
+
+import {GET_SPECIES} from './query';
+
+import {SpeciesType} from './type';
 
 // TODO: Build pages
 const Page1 = () => (<div>Playbook</div>);
@@ -22,6 +27,16 @@ export default () => {
     () => pageData.find((page) => page.pageNumber === currentPage),
     [currentPage],
   );
+
+  // TODO: This will pass data into the wizard.
+  // TODO: Probably figure out all initial values here
+  // TODO: Handle errors.
+  const {loading, error: _error, data} = useQuery(GET_SPECIES);
+  const species = data && data.listSpecies.map(
+    ({name}: SpeciesType) => ({id: name, title: name}),
+  );
+  console.log('species data', species);
+  const initialValues = {species};
   const CurrentComponent = currentPageData.component;
 
   return (
@@ -39,8 +54,12 @@ export default () => {
           ))}
         </div>
         <div>
-          <div>{currentPageData.label}</div>
-          <CurrentComponent />
+          {!loading && (
+            <>
+              <div>{currentPageData.label}</div>
+              <CurrentComponent initialValues={initialValues} />
+            </>
+          )}
         </div>
       </div>
       <div>
