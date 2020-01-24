@@ -17,7 +17,10 @@
     "@typescript-eslint/no-unused-vars": ["error", {
       "varsIgnorePattern": "^_",
       "argsIgnorePattern": "^_"
-    }]
+    }],
+    "react/jsx-props-no-spreading": [
+      {"custom": "enforce", "exceptions": ["CurrentComponent"]}
+    ]
   },
   "settings": {
     "import/resolver": {
