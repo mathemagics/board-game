@@ -51,6 +51,7 @@ export default () => {
   const playbookOptions = playbookData && playbookData.listPlaybooks.map(
     ({id, name}: PlaybookType) => ({id, title: name}),
   );
+  console.log('aaaa', playbookData && playbookData.listPlaybooks);
 
   const [
     createCharacterMutation,
