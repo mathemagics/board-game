@@ -5,7 +5,7 @@ import {HttpLink} from 'apollo-link-http';
 const cache = new InMemoryCache();
 // TODO Environment variable to determine this
 const link = new HttpLink({
-  uri: 'https://root-beyond-api.herokuapp.com/api',
+  uri: 'https://the-woodland.herokuapp.com/api',
   fetchOptions: {
     mode: 'cors',
   },

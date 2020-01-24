@@ -3,6 +3,12 @@ export interface OptionType {
   title: string
 }
 
+export type CharacterBuilderType = 'standard' | 'quickstart' | 'random';
+
+export interface CharacterType {
+  id: number,
+}
+
 export interface SpeciesType {
   id: number, name: string,
 }
