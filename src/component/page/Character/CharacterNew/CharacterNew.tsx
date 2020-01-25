@@ -12,16 +12,16 @@ export default () => {
 
   const handleClick = (page: string) => {
     createCharacterMutation()
-    .then((response) => {
-      const characterID = response.data.createCharacter.id
-      history.push(`/character/${page}/${characterID}`, {characterID})
-    })
-  }
+      .then((response) => {
+        const characterID = response.data.createCharacter.id;
+        history.push(`/character/${page}/${characterID}`, {characterID});
+      });
+  };
 
   return (
     <div>
       <button type="button">Standard</button>
-      <button type="button" onClick={() => {handleClick('quickstart')}}>
+      <button type="button" onClick={() => { handleClick('quickstart'); }}>
         Quickstart
       </button>
       <button type="button">Random</button>

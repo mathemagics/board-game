@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {Form} from '@rocketseat/unform';
 import {useParams} from 'react-router-dom';
-import {useQuery, useMutation} from '@apollo/react-hooks';
+import {useQuery} from '@apollo/react-hooks';
 
 import Wizard from 'component/base/Wizard';
 
@@ -40,7 +40,7 @@ export default () => {
     ({id, name}: PlaybookType) => ({id, title: name}),
   );
 
-  const loading = speciesLoading || playbookLoading;
+  const loading = speciesLoading || playbookLoading || characterLoading;
 
   // TODO: handle building initialValues in separate file
   const initialValues = {species: speciesOptions, playbooks: playbookOptions};

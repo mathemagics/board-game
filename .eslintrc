@@ -9,18 +9,20 @@
     "prettier/@typescript-eslint"
   ],
   "rules":{
-    "object-curly-spacing": ["error", "never"],
-    "brace-style": [2, "1tbs", { "allowSingleLine": true }],
-    "indent": ["error", 2],
-    "max-len": ["error", { "code": 90 }],
-    "semi": ["error", "always"],
     "@typescript-eslint/no-unused-vars": ["error", {
       "varsIgnorePattern": "^_",
       "argsIgnorePattern": "^_"
     }],
+    "brace-style": [2, "1tbs", { "allowSingleLine": true }],
+    "object-curly-spacing": ["error", "never"],
+    "indent": ["error", 2],
+    "max-len": ["error", { "code": 90 }],
     "react/jsx-props-no-spreading": [
+      "error",
       {"custom": "enforce", "exceptions": ["CurrentComponent"]}
-    ]
+    ],
+    "react/prop-types": "off",
+    "semi": ["error", "always"]
   },
   "settings": {
     "import/resolver": {

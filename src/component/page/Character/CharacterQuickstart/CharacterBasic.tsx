@@ -4,7 +4,7 @@ import {useMutation} from '@apollo/react-hooks';
 
 import {UPDATE_SPECIES, UPDATE_NAME, UPDATE_PLAYBOOK} from '../mutation';
 
-import {OptionType, CharacterType} from '../type';
+import {OptionType} from '../type';
 
 // TODO put initial values types somewhere useful
 interface CharacterBasicProps {
