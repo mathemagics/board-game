@@ -16,23 +16,25 @@ export default () => {
   // TODO: Look into batching this
 
   const {charID: characterId} = useParams();
+
   const {
     loading: characterLoading,
     data: characterData,
   } = useQuery(GET_CHARACTER, {variables: {id: characterId}});
+
   const {
     loading: speciesLoading,
     data: speciesData,
   } = useQuery(GET_SPECIES);
 
-  const speciesOptions = speciesData && speciesData.listSpecies.map(
-    ({name}: SpeciesType) => ({id: name, title: name}),
-  );
-
   const {
     loading: playbookLoading,
     data: playbookData,
   } = useQuery(GET_PLAYBOOKS);
+
+  const speciesOptions = speciesData && speciesData.listSpecies.map(
+    ({name}: SpeciesType) => ({id: name, title: name}),
+  );
 
   const playbookOptions = playbookData && playbookData.listPlaybooks.map(
     ({id, name}: PlaybookType) => ({id, title: name}),
@@ -44,9 +46,9 @@ export default () => {
   const initialValues = {species: speciesOptions, playbooks: playbookOptions};
 
 
-  return (
-    <Form onSubmit={() => {}}>
-      {!loading && <Wizard pages={pages} childProps={{initialValues}} />}
+  return loading ? null : (
+    <Form onSubmit={() => {}} initialData={{name: characterData.character.name}}>
+      <Wizard pages={pages} childProps={{initialValues}} />
     </Form>
   );
 };

@@ -7,15 +7,8 @@ import {CREATE_CHARACTER} from '../mutation';
 
 export default () => {
   const history = useHistory();
-  const [
-    createCharacterMutation,
-    {
-      data: characterData,
-      loading: characterLoading,
-    },
-  ] = useMutation(CREATE_CHARACTER);
 
-  const character = characterData && characterData.createCharacter;
+  const [createCharacterMutation, _data] = useMutation(CREATE_CHARACTER);
 
   const handleClick = (page: string) => {
     createCharacterMutation()
@@ -23,10 +16,7 @@ export default () => {
       const characterID = response.data.createCharacter.id
       history.push(`/character/${page}/${characterID}`, {characterID})
     })
-
   }
-
-
 
   return (
     <div>
