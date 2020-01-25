@@ -5,6 +5,7 @@ import CharacterNew from './CharacterNew';
 import CharacterQuickstart from './CharacterQuickstart';
 import CharacterStandard from './CharacterStandard';
 import CharacterRandom from './CharacterRandom';
+import CharacterSheet from './CharacterSheet';
 
 
 export default () => {
@@ -23,6 +24,9 @@ export default () => {
       </Route>
       <Route path={`${match.path}/random`}>
         <CharacterRandom />
+      </Route>
+      <Route path={`${match.path}/sheet/:charID`}>
+        <CharacterSheet />
       </Route>
     </Switch>
   );
