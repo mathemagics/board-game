@@ -5,27 +5,29 @@ import CharacterNew from './CharacterNew';
 import CharacterQuickstart from './CharacterQuickstart';
 import CharacterStandard from './CharacterStandard';
 import CharacterRandom from './CharacterRandom';
+import CharacterSheet from './CharacterSheet';
 
 
 export default () => {
   const match = useRouteMatch();
 
   return (
-    <>
-      <Switch>
-        <Route exact path={`${match.path}`}>
-          <CharacterNew />
-        </Route>
-        <Route path={`${match.path}/quickstart/:charID`}>
-          <CharacterQuickstart />
-        </Route>
-        <Route path={`${match.path}/standard`}>
-          <CharacterStandard />
-        </Route>
-        <Route path={`${match.path}/random`}>
-          <CharacterRandom />
-        </Route>
-      </Switch>
-    </>
+    <Switch>
+      <Route exact path={`${match.path}`}>
+        <CharacterNew />
+      </Route>
+      <Route path={`${match.path}/quickstart/:charID`}>
+        <CharacterQuickstart />
+      </Route>
+      <Route path={`${match.path}/standard`}>
+        <CharacterStandard />
+      </Route>
+      <Route path={`${match.path}/random`}>
+        <CharacterRandom />
+      </Route>
+      <Route path={`${match.path}/sheet/:charID`}>
+        <CharacterSheet />
+      </Route>
+    </Switch>
   );
 };
