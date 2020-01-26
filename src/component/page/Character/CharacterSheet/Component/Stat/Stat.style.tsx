@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
-const HEIGHT = 149;
-const WIDTH = 153;
+const HEIGHT = 148;
+const WIDTH = 148;
 const OUTER_BORDER_RADIUS = 20;
 const INNER_BORDER_RADIUS = 10;
 

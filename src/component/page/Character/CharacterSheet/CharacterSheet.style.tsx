@@ -5,7 +5,7 @@ export const StatsContainer = styled.div`
   align-items: center;
 
   & > :not(:first-child) {
-    margin-left: 32px;
+    margin-left: 46px;
   }
 `;
 
@@ -27,4 +27,27 @@ export const Name = styled.div`
 
 export const Header = styled.div`
   display: flex;
+  justify-content: space-between;
+  margin-bottom: 16px;
+`;
+
+export const SectionRow = styled.div`
+  display: flex;
+
+  & > :first-child {
+    flex: 3;
+    margin-right: 16px;
+  }
+
+  & > :last-child {
+    flex: 1;
+  }
+`;
+
+export const WideColumn = styled.div`
+  flex: 3;
+`;
+
+export const NarrowColumn = styled.div`
+  flex: 1;
 `;

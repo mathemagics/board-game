@@ -16,12 +16,7 @@ export default ({name, value}: StatProps) => {
         {name}
       </Name>
       <Multiplier>
-        <span>
-          {prefix}
-        </span>
-        <span>
-          {value}
-        </span>
+        {`${prefix}${value}`}
       </Multiplier>
     </Container>
   );
