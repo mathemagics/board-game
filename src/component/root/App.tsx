@@ -7,6 +7,7 @@ import {
   Route,
 } from "react-router-dom";
 
+import Page from 'component/base/Page';
 import Character from 'component/page/Character';
 import Home from 'component/page/Home';
 
@@ -21,15 +22,17 @@ export default () => (
     <ApolloProvider client={client}>
       <ThemeProvider theme={theme}>
         <Router>
-          <Switch>
-            {/* TODO: Routes */}
-            <Route exact path="/">
-              <Home />
-            </Route>
-            <Route path="/character">
-              <Character />
-            </Route>
-          </Switch>
+          <Page>
+            <Switch>
+              {/* TODO: Routes */}
+              <Route exact path="/">
+                <Home />
+              </Route>
+              <Route path="/character">
+                <Character />
+              </Route>
+            </Switch>
+          </Page>
         </Router>
       </ThemeProvider>
     </ApolloProvider>

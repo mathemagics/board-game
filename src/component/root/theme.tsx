@@ -1,10 +1,16 @@
 export default {
   colors: {
-    black: '#333333',
     primaryColor: '',
+    black: '#444444',
     white: '#ffffff',
+    grey: '#888888',
   },
   fontSizes: {
-    large: 1.5,
+    large: '24px',
+    xLarge: '36px',
+    xxLarge: '48px',
+  },
+  sizes: {
+    headerHeight: '60px',
   },
 };

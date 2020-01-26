@@ -1,5 +1,9 @@
 import * as React from 'react';
 
+import {
+  Container, Name, BoxContainer, Box,
+} from './Track.style';
+
 interface TrackProps {
   name: string,
   count: number
@@ -8,14 +12,14 @@ interface TrackProps {
 export default ({name, count}: TrackProps) => {
   const countArray = [...Array(count)];
   return (
-    <div>
-      <div>{name}</div>
-      <div>
+    <Container>
+      <Name>{name}</Name>
+      <BoxContainer>
         {countArray.map((_val, index) => (
           // eslint-disable-next-line react/no-array-index-key
-          <div key={index}>o</div>
+          <Box key={index} />
         ))}
-      </div>
-    </div>
+      </BoxContainer>
+    </Container>
   );
 };

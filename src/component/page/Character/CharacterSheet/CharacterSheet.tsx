@@ -5,16 +5,18 @@ import {useQuery} from '@apollo/react-hooks';
 import Stat from './Component/Stat';
 import Track from './Component/Track';
 
-import {StatsContainer} from './CharacterSheet.style';
+import {
+  Name, Header, StatsContainer, TracksContainer,
+} from './CharacterSheet.style';
 
 import {GET_CHARACTER} from '../query';
 
 const STATS = [
-  {name: 'Charm', value: '-2'},
-  {name: 'Cunning', value: '+2'},
-  {name: 'Finesse', value: '0'},
-  {name: 'Luck', value: '0'},
-  {name: 'Might', value: '+1'},
+  {name: 'Charm', value: -2},
+  {name: 'Cunning', value: 1},
+  {name: 'Finesse', value: 0},
+  {name: 'Luck', value: 0},
+  {name: 'Might', value: 2},
 ];
 
 const NAME = "Pouch";
@@ -35,15 +37,18 @@ export default () => {
   } = useQuery(GET_CHARACTER, {variables: {id: characterId}});
 
   return characterLoading ? null : (
-    <div>
-      <div>CharacterSheet</div>
-      <div>{`${NAME} the ${PLAYBOOK}`}</div>
-      <StatsContainer>
-        {STATS.map(({name, value}) => <Stat key={name} name={name} value={value} />)}
-      </StatsContainer>
+    <Header>
       <div>
-        {TRACKS.map(({name, count}) => <Track key={name} name={name} count={count} />)}
+        <Name>{`${NAME}, the ${PLAYBOOK}`}</Name>
+        <StatsContainer>
+          {STATS.map(({name, value}) => <Stat key={name} name={name} value={value} />)}
+        </StatsContainer>
       </div>
-    </div>
+      <div>
+        <TracksContainer>
+          {TRACKS.map(({name, count}) => <Track key={name} name={name} count={count} />)}
+        </TracksContainer>
+      </div>
+    </Header>
   );
 };

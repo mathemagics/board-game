@@ -4,12 +4,25 @@ import {Container, Name, Multiplier} from './Stat.style';
 
 interface StatProps {
   name: string,
-  value: string,
+  value: number,
 }
 
-export default ({name, value}: StatProps) => (
-  <Container>
-    <Name>{name}</Name>
-    <Multiplier>{value}</Multiplier>
-  </Container>
-);
+export default ({name, value}: StatProps) => {
+  const prefix = value > 0 ? '+' : '';
+
+  return (
+    <Container>
+      <Name>
+        {name}
+      </Name>
+      <Multiplier>
+        <span>
+          {prefix}
+        </span>
+        <span>
+          {value}
+        </span>
+      </Multiplier>
+    </Container>
+  );
+};
