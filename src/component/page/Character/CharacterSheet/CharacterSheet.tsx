@@ -54,6 +54,7 @@ export default () => {
           </TracksContainer>
         </div>
       </Header>
+
       <SectionRow>
         <div>
           <Section title="your nature">
@@ -71,11 +72,17 @@ export default () => {
             weapons
           </Section>
         </div>
-
       </SectionRow>
-      <Section title="your moves">
-        <div>moves</div>
-      </Section>
+      <SectionRow>
+
+        <Section title="your moves">
+          <div>moves</div>
+        </Section>
+        <Section title="your equipment">
+          <div>equipment</div>
+        </Section>
+      </SectionRow>
+
       <Section title="your reputation">
         <div>reputation</div>
       </Section>
