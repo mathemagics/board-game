@@ -13,20 +13,25 @@ import Home from 'component/page/Home';
 import client from './apollo';
 import theme from './theme';
 
+import GlobalStyles from './GlobalStyles';
+
 export default () => (
-  <ApolloProvider client={client}>
-    <ThemeProvider theme={theme}>
-      <Router>
-        <Switch>
-          {/* TODO: Routes */}
-          <Route exact path="/">
-            <Home />
-          </Route>
-          <Route path="/character">
-            <Character />
-          </Route>
-        </Switch>
-      </Router>
-    </ThemeProvider>
-  </ApolloProvider>
+  <>
+    <GlobalStyles />
+    <ApolloProvider client={client}>
+      <ThemeProvider theme={theme}>
+        <Router>
+          <Switch>
+            {/* TODO: Routes */}
+            <Route exact path="/">
+              <Home />
+            </Route>
+            <Route path="/character">
+              <Character />
+            </Route>
+          </Switch>
+        </Router>
+      </ThemeProvider>
+    </ApolloProvider>
+  </>
 );

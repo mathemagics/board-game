@@ -5,6 +5,8 @@ import {useQuery} from '@apollo/react-hooks';
 import Stat from './Component/Stat';
 import Track from './Component/Track';
 
+import {StatsContainer} from './CharacterSheet.style';
+
 import {GET_CHARACTER} from '../query';
 
 const STATS = [
@@ -36,9 +38,9 @@ export default () => {
     <div>
       <div>CharacterSheet</div>
       <div>{`${NAME} the ${PLAYBOOK}`}</div>
-      <div>
+      <StatsContainer>
         {STATS.map(({name, value}) => <Stat key={name} name={name} value={value} />)}
-      </div>
+      </StatsContainer>
       <div>
         {TRACKS.map(({name, count}) => <Track key={name} name={name} count={count} />)}
       </div>
