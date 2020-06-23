@@ -58,20 +58,14 @@ const rrfProps = {
 
 const PrivateRoute = ({ children, ...rest }) => {
   const auth = useSelector(state => state.firebase.auth);
+  if (isLoaded(auth) && isEmpty(auth)) {
+    firebase.login({ provider: "google", type: "popup" });
+  }
   return (
     <Route
       {...rest}
       render={({ location }) =>
-        isLoaded(auth) && !isEmpty(auth) ? (
-          children
-        ) : (
-          <Redirect
-            to={{
-              pathname: "/",
-              state: { from: location }
-            }}
-          />
-        )
+        isLoaded(auth) && !isEmpty(auth) ? children : <div>login</div>
       }
     />
   );
