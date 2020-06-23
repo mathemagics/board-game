@@ -48,7 +48,7 @@ export default () => {
 
   return game ? (
     <div className="app">
-      <div style={{ fontSize: 20 }}>{gameID}</div>
+      <div style={{ fontSize: 20, padding: 16 }}> Game ID: {gameID}</div>
       <HexGrid width={1000} height={550} viewBox="-65 -50 100 100">
         {game.board && <Board gameID={gameID} board={game.board} />}
         {game.heroes && <Heroes gameID={gameID} heroes={game.heroes} />}

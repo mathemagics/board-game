@@ -3,14 +3,14 @@ import { Layout, Hexagon } from "react-hexgrid";
 
 export const Hex = styled(Hexagon)`
   background: white;
+  fill: ${({ starting, drawing }) =>
+    starting ? "#44a955" : drawing ? "#4d44a9" : "#4499a9"};
 `;
 
 export const Map = styled(Layout)`
   background: white;
 
   g {
-    fill: ${({ blocked }) => (blocked ? "#465880" : "#4499a9")};
-
     fill-opacity: 0.6;
   }
 
