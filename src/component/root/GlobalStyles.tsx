@@ -1,4 +1,4 @@
-import {createGlobalStyle} from 'styled-components';
+import { createGlobalStyle } from "styled-components";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-expressions
 export default createGlobalStyle`
@@ -198,5 +198,15 @@ export default createGlobalStyle`
   }
   img {
     max-width: 100%;
+  }
+  [draggable] {
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+    -moz-user-drag: element;
+    -webkit-user-drag: element;
+    -khtml-user-drag: element;
+    user-drag: element;
   }
 `;

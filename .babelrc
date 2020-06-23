@@ -19,8 +19,9 @@
       "module-resolver", {
         "root": ["./src"],
         "alias": {
-          "component": "./src/component"
-        },
+          "component": "./src/component",
+          "game": "./src/game"
+        }
       }
     ]
   ]

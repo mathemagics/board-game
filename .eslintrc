@@ -2,27 +2,22 @@
   "root": true,
   "parser": "@typescript-eslint/parser",
   "plugins": [
-    "@typescript-eslint"
+    "@typescript-eslint",
+    "prettier"
   ],
   "extends": [
     "airbnb-typescript",
-    "prettier/@typescript-eslint"
+    "prettier",
+    "prettier/@typescript-eslint",
+    "prettier/react"
   ],
   "rules":{
+    "prettier/prettier": "error",
     "@typescript-eslint/no-unused-vars": ["error", {
       "varsIgnorePattern": "^_",
       "argsIgnorePattern": "^_"
     }],
-    "brace-style": [2, "1tbs", { "allowSingleLine": true }],
-    "object-curly-spacing": ["error", "never"],
-    "indent": ["error", 2],
-    "max-len": ["error", { "code": 90 }],
-    "react/jsx-props-no-spreading": [
-      "error",
-      {"custom": "enforce", "exceptions": ["CurrentComponent"]}
-    ],
-    "react/prop-types": "off",
-    "semi": ["error", "always"]
+    "react/jsx-props-no-spreading": "off"
   },
   "settings": {
     "import/resolver": {
