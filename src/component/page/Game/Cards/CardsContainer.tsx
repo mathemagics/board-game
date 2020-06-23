@@ -1,19 +1,49 @@
 import * as React from "react";
-import { useFirestore } from "react-redux-firebase";
+import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 
-import { drawCard } from "game/card";
+import { drawCard, discardCard, shuffle } from "game/card";
 
 import Cards from "./Cards";
 
-export default ({ hand, updateDeck, deck }: { deck: [string] }) => {
-  const fireStore = useFirestore();
+export default ({ updateGame }: { deck: [string] }) => {
+  const { gameID } = useParams();
+  const { uid } = useSelector(state => state.firebase.auth);
+  const {
+    players: {
+      [uid]: { hand }
+    },
+    deck,
+    discard
+  } = useSelector(
+    ({ firestore: { data } }) => data.games && data.games[gameID]
+  );
 
-  const handleDraw = React.useCallback(() => {
+  const handleDraw = () => {
     const [card, newDeck] = drawCard(deck);
-    const newHand = [...hand1, card];
-  }, [gameID, deck]);
+    const newHand = [...hand, card];
+    updateGame({ deck: newDeck, [`players.${uid}.hand`]: newHand });
+  };
+
+  const handleDiscard = card => {
+    const [newHand, newDiscard] = discardCard({ card, hand, discard });
+    updateGame({ discard: newDiscard, [`players.${uid}.hand`]: newHand });
+  };
+
+  const handleReshuffle = () => {
+    const combinedDeck = [...discard, ...deck];
+    const newDeck = shuffle(combinedDeck);
+    updateGame({ deck: newDeck, discard: [] });
+  };
 
   return (
-    <Cards deck={deck} hand={hand} discard={discard} onDraw={handleDraw} />
+    <Cards
+      deck={deck}
+      discard={discard}
+      hand={hand}
+      onDiscard={handleDiscard}
+      onDraw={handleDraw}
+      onReshuffle={handleReshuffle}
+    />
   );
 };

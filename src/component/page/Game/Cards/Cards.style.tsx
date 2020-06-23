@@ -1,9 +1,10 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
-  margin-top: 16px;
+  margin-top: 24px;
   display: flex;
   flex-direction: column;
+  align-items: center;
 `;
 
 export const Button = styled.button`
@@ -15,11 +16,18 @@ export const Button = styled.button`
 export const Controls = styled.div`
   display: flex;
   padding: 20px;
+
+  & > *:not(first-child) {
+    margin-right: 8px;
+  }
 `;
 
 export const Hand = styled.div`
   display: flex;
   flex-flow: row wrap;
+  & > *:not(first-child) {
+    margin-left: 2px;
+  }
 `;
 
 export const Info = styled.span`

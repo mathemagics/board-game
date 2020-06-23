@@ -10,7 +10,7 @@ export default () => {
 
   const firestore = useFirestore();
   const auth = useSelector(state => state.firebase.auth);
-  console.log(auth);
+
   React.useEffect(() => {
     const newGame = createGame({ userID: auth.uid });
 

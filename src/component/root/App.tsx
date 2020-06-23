@@ -29,6 +29,8 @@ import GlobalStyles from "./GlobalStyles";
 import "firebase/auth";
 import "firebase/firestore";
 
+import { fbConfig } from "../../../secret";
+
 // react-redux-firebase config
 const rrfConfig = {
   userProfile: "users",

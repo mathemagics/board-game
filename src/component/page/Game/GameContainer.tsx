@@ -4,7 +4,6 @@ import { useFirestore, useFirestoreConnect } from "react-redux-firebase";
 import { HexGrid } from "react-hexgrid";
 import { useParams } from "react-router-dom";
 
-import { drawCard, discardCard } from "game/card";
 import { createPlayer } from "game/player";
 
 import Board from "./Board";
@@ -51,20 +50,6 @@ export default () => {
     updateGame({ [`players.${uid}`]: player });
   };
 
-  const handleDraw = () => {
-    const previousHand = game.players[uid].hand;
-    const [card, newDeck] = drawCard(game.deck);
-    const newHand = [...previousHand, card];
-    updateGame({ deck: newDeck, [`players.${uid}.hand`]: newHand });
-  };
-
-  const handleDiscard = card => {
-    const { hand } = game.players[uid];
-    const { discard } = game;
-    const [newHand, newDiscard] = discardCard({ card, hand, discard });
-    updateGame({ discard: newDiscard, [`players.${uid}.hand`]: newHand });
-  };
-
   if (!game.players[uid]) {
     updatePlayer(createPlayer(uid));
   }
@@ -79,8 +64,7 @@ export default () => {
         deck={game.deck}
         discard={game.discard}
         hand={game.players[uid].hand}
-        onDraw={handleDraw}
-        onDiscard={handleDiscard}
+        updateGame={updateGame}
       />
     </div>
   );
