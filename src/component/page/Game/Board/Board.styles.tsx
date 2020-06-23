@@ -15,7 +15,7 @@ export const Map = styled(Layout)`
   }
 
   g text {
-    font-size: 0.12em;
+    font-size: 0.18em;
     fill: white;
     fill-opacity: 0.7;
     transition: fill-opacity 0.5s;

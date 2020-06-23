@@ -4,6 +4,7 @@ import { useFirestore, useFirestoreConnect } from "react-redux-firebase";
 import { GridGenerator, HexGrid } from "react-hexgrid";
 
 import { heroes as defaultHeroes } from "game/hero";
+import { newDeck } from "game/card";
 import Board from "./Board";
 import Heroes from "./Heroes";
 import Cards from "./Cards";
@@ -27,12 +28,13 @@ export default () => {
       text: defaultHeroes[index]
     }));
 
+    const deck = newDeck();
     const board = hexBoard.map(hex => ({ ...hex }));
     const heroes = hexHeroes.map(hero => ({ ...hero }));
 
     firestore
       .collection("games")
-      .add({ board, heroes })
+      .add({ board, heroes, deck })
       .then(game => {
         setGameID(game.id);
       });
@@ -47,11 +49,18 @@ export default () => {
   return game ? (
     <div className="app">
       <div style={{ fontSize: 20 }}>{gameID}</div>
-      <HexGrid width={1600} height={900} viewBox="-32 -35 100 100">
+      <HexGrid width={1000} height={550} viewBox="-65 -50 100 100">
         {game.board && <Board gameID={gameID} board={game.board} />}
         {game.heroes && <Heroes gameID={gameID} heroes={game.heroes} />}
-        {game.card && <Cards />}
       </HexGrid>
+      {game.deck && (
+        <Cards
+          gameID={gameID}
+          deck={game.deck || []}
+          hand1={game.hand1 || []}
+          hand2={game.hand2 || []}
+        />
+      )}
     </div>
   ) : null;
 };

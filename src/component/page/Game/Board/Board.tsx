@@ -86,10 +86,10 @@ const Board = ({ gameID, board, updateBoard }) => {
 
   return (
     <Map
-      size={{ x: 4, y: 4 }}
+      size={{ x: 5.5, y: 5.5 }}
       flat={false}
       spacing={1.01}
-      origin={{ x: -30, y: 0 }}
+      origin={{ x: -40, y: 0 }}
     >
       {board.map((hex, i) => (
         <Hex

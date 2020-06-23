@@ -187,7 +187,6 @@ export default createGlobalStyle`
     height: 100%;
   }
   body {
-    min-height: 100%;
     font-family: Helvetica, Arial, sans-serif;
     font-weight: 400;
     color: #333333;
