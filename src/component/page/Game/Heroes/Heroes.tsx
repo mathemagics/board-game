@@ -1,35 +1,11 @@
 import * as React from "react";
 import { useFirestore } from "react-redux-firebase";
-import styled from "styled-components";
 
-import { Layout, Hexagon, Text, Pattern, HexUtils } from "react-hexgrid";
+import { Hexagon, Text, Pattern, HexUtils } from "react-hexgrid";
 
-const Map = styled(Layout)`
-  background: white;
+import { Map } from "./Heroes.styles";
 
-  g {
-    fill: #4499a9;
-    fill-opacity: 0.6;
-  }
-
-  g text {
-    font-size: 1.5px;
-    fill: white;
-    fill-opacity: 0.7;
-    transition: fill-opacity 0.5s;
-  }
-
-  path {
-    fill: none;
-    stroke: #7be3f6;
-    stroke-width: 0.18em;
-    stroke-opacity: 0.7;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-  }
-`;
-
-const TilesLayout = ({ heroes, gameID }) => {
+const Heroes = ({ heroes, gameID }) => {
   const fireStore = useFirestore();
   const onDragStart = (_event, _source) => {
     // Could do something on onDragStart as well, if you wish
@@ -83,4 +59,4 @@ const TilesLayout = ({ heroes, gameID }) => {
   );
 };
 
-export default TilesLayout;
+export default Heroes;

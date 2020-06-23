@@ -1,11 +1,12 @@
 import * as React from "react";
 import { useSelector } from "react-redux";
 import { useFirestore, useFirestoreConnect } from "react-redux-firebase";
-import { GridGenerator } from "react-hexgrid";
+import { GridGenerator, HexGrid } from "react-hexgrid";
 
 import { heroes as defaultHeroes } from "game/hero";
-
-import Game from "./Game";
+import Board from "./Board";
+import Heroes from "./Heroes";
+import Cards from "./Cards";
 
 export default () => {
   const pathArray = window.location.pathname.split("/");
@@ -43,5 +44,14 @@ export default () => {
     );
   });
 
-  return game ? <Game gameID={gameID} game={game} /> : null;
+  return game ? (
+    <div className="app">
+      <div style={{ fontSize: 20 }}>{gameID}</div>
+      <HexGrid width={1600} height={900} viewBox="-32 -35 100 100">
+        {game.board && <Board gameID={gameID} board={game.board} />}
+        {game.heroes && <Heroes gameID={gameID} heroes={game.heroes} />}
+        {game.card && <Cards />}
+      </HexGrid>
+    </div>
+  ) : null;
 };

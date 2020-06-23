@@ -2,9 +2,9 @@ import * as React from "react";
 import { Text, HexUtils } from "react-hexgrid";
 import { useFirestore } from "react-redux-firebase";
 
-import { Map, Hex } from "./Map.styles";
+import { Map, Hex } from "./Board.styles";
 
-const GameLayout = ({ gameID, board, updateBoard }) => {
+const Board = ({ gameID, board, updateBoard }) => {
   const [next, setNext] = React.useState();
 
   const fireStore = useFirestore();
@@ -93,6 +93,7 @@ const GameLayout = ({ gameID, board, updateBoard }) => {
     >
       {board.map((hex, i) => (
         <Hex
+          blocked={hex.blocked}
           key={i}
           q={hex.q}
           r={hex.r}
@@ -111,4 +112,4 @@ const GameLayout = ({ gameID, board, updateBoard }) => {
   );
 };
 
-export default GameLayout;
+export default Board;
