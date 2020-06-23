@@ -1,24 +1,33 @@
 import * as React from "react";
 import { ThemeProvider } from "styled-components";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-
-import { Provider } from "react-redux";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect
+} from "react-router-dom";
+import { Provider, useSelector } from "react-redux";
 import firebase from "firebase/app";
-import "firebase/auth";
-import "firebase/firestore";
-
 import { createStore, combineReducers } from "redux";
 import {
   ReactReduxFirebaseProvider,
-  firebaseReducer
+  firebaseReducer,
+  isLoaded,
+  isEmpty
 } from "react-redux-firebase";
 import { createFirestoreInstance, firestoreReducer } from "redux-firestore"; // <- needed if using firestore
 
 import Page from "component/base/Page";
+import Auth from "component/page/Auth";
 import Home from "component/page/Home";
 import Game from "component/page/Game";
+import NewGame from "component/page/Game/New";
+
 import theme from "./theme";
 import GlobalStyles from "./GlobalStyles";
+
+import "firebase/auth";
+import "firebase/firestore";
 
 // react-redux-firebase config
 const rrfConfig = {
@@ -29,7 +38,6 @@ const rrfConfig = {
 firebase.initializeApp(fbConfig);
 firebase.firestore();
 
-// Add firebase to reducers
 const rootReducer = combineReducers({
   firebase: firebaseReducer,
   firestore: firestoreReducer
@@ -46,6 +54,27 @@ const rrfProps = {
   createFirestoreInstance
 };
 
+const PrivateRoute = ({ children, ...rest }) => {
+  const auth = useSelector(state => state.firebase.auth);
+  return (
+    <Route
+      {...rest}
+      render={({ location }) =>
+        isLoaded(auth) && !isEmpty(auth) ? (
+          children
+        ) : (
+          <Redirect
+            to={{
+              pathname: "/",
+              state: { from: location }
+            }}
+          />
+        )
+      }
+    />
+  );
+};
+
 export default () => (
   <>
     <GlobalStyles />
@@ -56,11 +85,17 @@ export default () => (
             <Page>
               <Switch>
                 <Route exact path="/">
+                  <Auth />
+                </Route>
+                <PrivateRoute exact path="/home">
                   <Home />
-                </Route>
-                <Route path="/game">
+                </PrivateRoute>
+                <PrivateRoute path="/game/new">
+                  <NewGame />
+                </PrivateRoute>
+                <PrivateRoute path="/game/:gameID">
                   <Game />
-                </Route>
+                </PrivateRoute>
               </Switch>
             </Page>
           </Router>

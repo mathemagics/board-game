@@ -4,10 +4,8 @@ import { useFirestore } from "react-redux-firebase";
 
 import { Map, Hex } from "./Board.styles";
 
-const Board = ({ gameID, board, updateBoard }) => {
+const Board = ({ board, updateBoard }) => {
   const [next, setNext] = React.useState();
-
-  const fireStore = useFirestore();
 
   const onDrop = React.useCallback(
     (event, source, targetProps) => {
@@ -21,10 +19,7 @@ const Board = ({ gameID, board, updateBoard }) => {
           return result;
         });
 
-        fireStore
-          .collection("games")
-          .doc(gameID)
-          .update({ board: hexas });
+        updateBoard(hexas);
       }
       setNext({ hex: source.state.hex, text: targetProps.data.text });
     },
@@ -73,10 +68,7 @@ const Board = ({ gameID, board, updateBoard }) => {
         return result;
       });
 
-      fireStore
-        .collection("games")
-        .doc(gameID)
-        .update({ board: hexas });
+      updateBoard(hexas);
     },
     [board, next]
   );

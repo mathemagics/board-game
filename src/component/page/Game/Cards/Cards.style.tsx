@@ -1,6 +1,7 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
+  margin-top: 16px;
   display: flex;
   flex-direction: column;
 `;
@@ -21,6 +22,10 @@ export const Hand = styled.div`
   flex-flow: row wrap;
 `;
 
-export const Remaining = styled.div`
+export const Info = styled.span`
   padding: 8px;
+
+  &:first-child {
+    margin-right: 8px;
+  }
 `;

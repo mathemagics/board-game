@@ -1,12 +1,10 @@
 import * as React from "react";
-import { useFirestore } from "react-redux-firebase";
 
 import { Hexagon, Text, Pattern, HexUtils } from "react-hexgrid";
 
 import { Map } from "./Heroes.styles";
 
-const Heroes = ({ heroes, gameID }) => {
-  const fireStore = useFirestore();
+const Heroes = ({ heroes, updateHeroes }) => {
   const onDragStart = (_event, _source) => {
     // Could do something on onDragStart as well, if you wish
   };
@@ -27,10 +25,7 @@ const Heroes = ({ heroes, gameID }) => {
       return result;
     });
 
-    fireStore
-      .collection("games")
-      .doc(gameID)
-      .update({ heroes: hexas });
+    updateHeroes(hexas);
   };
 
   return (

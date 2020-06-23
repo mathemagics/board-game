@@ -3,16 +3,15 @@ import { useHistory } from "react-router-dom";
 
 export default () => {
   const history = useHistory();
-  const [game, setGame] = React.useState("");
+  const [gameID, setGameID] = React.useState("");
   return (
     <div>
-      <div>Home</div>
       <div>
         <div>
           <button
             type="button"
             onClick={() => {
-              history.push("/game");
+              history.push("/game/new");
             }}
           >
             New Game
@@ -22,17 +21,17 @@ export default () => {
           <input
             style={{ border: "1px solid black" }}
             onChange={e => {
-              setGame(e.target.value);
+              setGameID(e.target.value);
             }}
-            value={game}
+            value={gameID}
           />
           <button
             type="button"
             onClick={() => {
-              history.push(`/game/${game}`);
+              history.push(`/game/${gameID}`);
             }}
           >
-            join Game
+            Join Game
           </button>
         </div>
       </div>

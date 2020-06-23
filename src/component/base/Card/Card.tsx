@@ -9,7 +9,7 @@ import {
 
 import { Container } from "./Card.style";
 
-export default ({ suit }) => {
+export default ({ suit, ...rest }) => {
   let Icon;
   let color;
   switch (suit) {
@@ -42,7 +42,7 @@ export default ({ suit }) => {
       break;
   }
   return (
-    <Container>
+    <Container {...rest}>
       <Icon color={color} />
     </Container>
   );

@@ -1,66 +1,87 @@
 import * as React from "react";
 import { useSelector } from "react-redux";
 import { useFirestore, useFirestoreConnect } from "react-redux-firebase";
-import { GridGenerator, HexGrid } from "react-hexgrid";
+import { HexGrid } from "react-hexgrid";
+import { useParams } from "react-router-dom";
 
-import { heroes as defaultHeroes } from "game/hero";
-import { newDeck } from "game/card";
+import { drawCard, discardCard } from "game/card";
+import { createPlayer } from "game/player";
+
 import Board from "./Board";
 import Heroes from "./Heroes";
 import Cards from "./Cards";
 
 export default () => {
-  const pathArray = window.location.pathname.split("/");
-  const pathID = pathArray[2];
-  const [gameID, setGameID] = React.useState(pathID);
+  const { gameID } = useParams();
 
-  const firestore = useFirestore();
-  useFirestoreConnect({ collection: "games" });
+  const fireStore = useFirestore();
+  const { uid } = useSelector(state => state.firebase.auth);
 
-  React.useEffect(() => {
-    if (pathID) {
-      return;
+  useFirestoreConnect([
+    {
+      collection: "games",
+      doc: gameID
     }
-    const hexBoard = GridGenerator.hexagon(5);
+  ]);
 
-    const hexHeroes = GridGenerator.rectangle(3, 4).map((hexagon, index) => ({
-      ...hexagon,
-      text: defaultHeroes[index]
-    }));
+  const game = useSelector(
+    ({ firestore: { data } }) => data.games && data.games[gameID]
+  );
 
-    const deck = newDeck();
-    const board = hexBoard.map(hex => ({ ...hex }));
-    const heroes = hexHeroes.map(hero => ({ ...hero }));
+  if (!game) {
+    return <div>Loading Game...</div>;
+  }
 
-    firestore
+  const updateGame = args => {
+    fireStore
       .collection("games")
-      .add({ board, heroes, deck })
-      .then(game => {
-        setGameID(game.id);
-      });
-  }, []);
+      .doc(gameID)
+      .update(args);
+  };
 
-  const game = useSelector(state => {
-    return (
-      gameID && state.firestore.data.games && state.firestore.data.games[gameID]
-    );
-  });
+  const updateBoard = board => {
+    updateGame({ board });
+  };
 
-  return game ? (
-    <div className="app">
-      <div style={{ fontSize: 20, padding: 16 }}> Game ID: {gameID}</div>
+  const updateHeroes = heroes => {
+    updateGame({ heroes });
+  };
+
+  const updatePlayer = board => {
+    updateGame({ [`players.${uid}`]: player });
+  };
+
+  const handleDraw = () => {
+    const previousHand = game.players[uid].hand;
+    const [card, newDeck] = drawCard(game.deck);
+    const newHand = [...previousHand, card];
+    updateGame({ deck: newDeck, [`players.${uid}.hand`]: newHand });
+  };
+
+  const handleDiscard = card => {
+    const { hand } = game.players[uid];
+    const { discard } = game;
+    const [newHand, newDiscard] = discardCard({ card, hand, discard });
+    updateGame({ discard: newDiscard, [`players.${uid}.hand`]: newHand });
+  };
+
+  if (!game.players[uid]) {
+    updatePlayer(createPlayer(uid));
+  }
+
+  return (
+    <div>
       <HexGrid width={1000} height={550} viewBox="-65 -50 100 100">
-        {game.board && <Board gameID={gameID} board={game.board} />}
-        {game.heroes && <Heroes gameID={gameID} heroes={game.heroes} />}
+        <Board updateBoard={updateBoard} board={game.board} />
+        <Heroes updateHeroes={updateHeroes} heroes={game.heroes} />
       </HexGrid>
-      {game.deck && (
-        <Cards
-          gameID={gameID}
-          deck={game.deck || []}
-          hand1={game.hand1 || []}
-          hand2={game.hand2 || []}
-        />
-      )}
+      <Cards
+        deck={game.deck}
+        discard={game.discard}
+        hand={game.players[uid].hand}
+        onDraw={handleDraw}
+        onDiscard={handleDiscard}
+      />
     </div>
-  ) : null;
+  );
 };

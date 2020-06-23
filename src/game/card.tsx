@@ -8,7 +8,7 @@ const COUNT = 10;
 
 const suits = [HEART, SPADE, DIAMOND, CLUB, FACE];
 
-export const createDeck = () => {
+export const newDeck = () => {
   return suits.reduce((acc, suit) => {
     for (let i = 0; i < COUNT; i += 1) {
       acc.push(suit);
@@ -28,7 +28,7 @@ export const shuffle = array => {
   return array;
 };
 
-export const newDeck = () => shuffle(createDeck());
+export const createDeck = () => shuffle(newDeck());
 
 export const drawCard = deck => {
   const randomIndex = Math.floor(Math.random() * deck.length);
@@ -37,4 +37,14 @@ export const drawCard = deck => {
     return randomIndex !== index;
   });
   return [card, remainingDeck];
+};
+
+export const discardCard = ({ card, hand, discard }) => {
+  const newHand = [...hand];
+  const index = newHand.indexOf(card);
+  if (index > -1) {
+    newHand.splice(index, 1);
+  }
+  const newDiscard = [...discard, card];
+  return [newHand, newDiscard];
 };
