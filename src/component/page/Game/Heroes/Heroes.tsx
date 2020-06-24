@@ -11,21 +11,19 @@ const Heroes = ({ heroes, updateHeroes }) => {
 
   // onDragEnd you can do some logic, e.g. to clean up hexagon if drop was success
   const onDragEnd = (event, source, success) => {
-    if (!success) {
-      return;
-    }
-    // TODO Drop the whole hex from array, currently somethings wrong with the patterns
-    // const hexas = heroes.filter(hex => !HexUtils.equals(targetHex, hex));
-    const hexas = heroes.map(hex => {
-      const result = { ...hex };
-      if (HexUtils.equals(source.state.hex, hex)) {
-        result.text = null;
-        result.image = null;
-      }
-      return result;
-    });
-
-    updateHeroes(hexas);
+    // TODO This removes the hero from the hero grid. do we want that? who knows
+    // if (!success) {
+    //   return;
+    // }
+    // const hexas = heroes.map(hex => {
+    //   const result = { ...hex };
+    //   if (HexUtils.equals(source.state.hex, hex)) {
+    //     result.text = null;
+    //     result.image = null;
+    //   }
+    //   return result;
+    // });
+    // updateHeroes(hexas);
   };
 
   return (

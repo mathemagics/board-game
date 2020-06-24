@@ -49,6 +49,7 @@ const Board = ({ board, updateBoard }) => {
     },
     [board]
   );
+
   const onDragEnd = React.useCallback(
     (event, source, success) => {
       console.log("onDrop", source);
@@ -72,6 +73,17 @@ const Board = ({ board, updateBoard }) => {
     },
     [board, next]
   );
+
+  const onDoubleClick = (event, source) => {
+    const hexas = board.map(hex => {
+      const result = { ...hex };
+      if (HexUtils.equals(source.state.hex, hex)) {
+        result.text = null;
+      }
+      return result;
+    });
+    updateBoard(hexas);
+  };
 
   return (
     <Map
@@ -103,6 +115,7 @@ const Board = ({ board, updateBoard }) => {
             onDragEnd={(e, h, s) => onDragEnd(e, h, s)}
             onDrop={(e, h, t) => onDrop(e, h, t)}
             onDragOver={(e, h) => onDragOver(e, h)}
+            onClick={(e, s, t) => onDoubleClick(e, s, t)}
           >
             <Text>{hex.text}</Text>
           </Hex>
