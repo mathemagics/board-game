@@ -65,7 +65,7 @@ const PrivateRoute = ({ children, ...rest }) => {
     <Route
       {...rest}
       render={({ location }) =>
-        isLoaded(auth) && !isEmpty(auth) ? children : <div>login</div>
+        isLoaded(auth) && !isEmpty(auth) ? children : <div>Logging In...</div>
       }
     />
   );

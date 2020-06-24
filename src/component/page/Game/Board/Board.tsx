@@ -1,6 +1,5 @@
 import * as React from "react";
 import { Text, HexUtils } from "react-hexgrid";
-import { useFirestore } from "react-redux-firebase";
 
 import { Map, Hex } from "./Board.styles";
 
@@ -9,9 +8,8 @@ const Board = ({ board, updateBoard }) => {
 
   const onDrop = React.useCallback(
     (event, source, targetProps) => {
-      if (!next || next.text !== targetProps.data.text) {
+      if (targetProps.data.new) {
         const hexas = board.map(hex => {
-          // When hexagon is dropped on this hexagon, copy it's image and text
           const result = { ...hex };
           if (HexUtils.equals(source.state.hex, hex)) {
             result.text = targetProps.data.text;
@@ -53,6 +51,8 @@ const Board = ({ board, updateBoard }) => {
   );
   const onDragEnd = React.useCallback(
     (event, source, success) => {
+      console.log("onDrop", source);
+
       if (!success) {
         return;
       }

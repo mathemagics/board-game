@@ -42,7 +42,7 @@ const Heroes = ({ heroes, updateHeroes }) => {
           r={hex.r}
           s={hex.s}
           fill={hex.image ? HexUtils.getID(hex) : null}
-          data={hex}
+          data={{ ...hex, new: true }}
           onDragStart={(e, h) => onDragStart(e, h)}
           onDragEnd={(e, h, s) => onDragEnd(e, h, s)}
         >

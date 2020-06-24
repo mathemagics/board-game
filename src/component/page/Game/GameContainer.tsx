@@ -7,8 +7,9 @@ import { useParams } from "react-router-dom";
 import { createPlayer } from "game/player";
 
 import Board from "./Board";
-import Heroes from "./Heroes";
 import Cards from "./Cards";
+import Heroes from "./Heroes";
+import Objects from "./Objects";
 
 export default () => {
   const { gameID } = useParams();
@@ -46,6 +47,10 @@ export default () => {
     updateGame({ heroes });
   };
 
+  const updateObjects = objects => {
+    updateGame({ objects });
+  };
+
   const updatePlayer = board => {
     updateGame({ [`players.${uid}`]: player });
   };
@@ -59,6 +64,7 @@ export default () => {
       <HexGrid width={1000} height={550} viewBox="-65 -50 100 100">
         <Board updateBoard={updateBoard} board={game.board} />
         <Heroes updateHeroes={updateHeroes} heroes={game.heroes} />
+        <Objects updateObjects={updateObjects} objects={game.objects} />
       </HexGrid>
       <Cards
         deck={game.deck}
