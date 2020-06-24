@@ -20,15 +20,28 @@ export default ({ updateGame }: { deck: [string] }) => {
     ({ firestore: { data } }) => data.games && data.games[gameID]
   );
 
+  const handleDiscard = card => {
+    const [newHand, newDiscard] = discardCard({ card, hand, discard });
+    updateGame({ discard: newDiscard, [`players.${uid}.hand`]: newHand });
+  };
+
   const handleDraw = () => {
     const [card, newDeck] = drawCard(deck);
     const newHand = [...hand, card];
     updateGame({ deck: newDeck, [`players.${uid}.hand`]: newHand });
   };
 
-  const handleDiscard = card => {
-    const [newHand, newDiscard] = discardCard({ card, hand, discard });
-    updateGame({ discard: newDiscard, [`players.${uid}.hand`]: newHand });
+  const handlePoolDraw = poolCard => {
+    const newHand = [...hand, poolCard];
+    const index = pool.indexOf(poolCard);
+    const [card, newDeck] = drawCard(deck);
+    const newPool = [...pool];
+    newPool[index] = card;
+    updateGame({
+      deck: newDeck,
+      [`players.${uid}.hand`]: newHand,
+      pool: newPool
+    });
   };
 
   const handleReshuffle = () => {
@@ -50,6 +63,7 @@ export default ({ updateGame }: { deck: [string] }) => {
       hand={hand}
       onDiscard={handleDiscard}
       onDraw={handleDraw}
+      onPoolDraw={handlePoolDraw}
       onReshuffle={handleReshuffle}
       onTakeDiscard={handleTakeDiscard}
       pool={pool}

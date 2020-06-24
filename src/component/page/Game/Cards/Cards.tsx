@@ -16,7 +16,7 @@ export default ({
   discard,
   hand,
   onDraw,
-  onDrawPool,
+  onPoolDraw,
   onDiscard,
   onReshuffle,
   onTakeDiscard,
@@ -33,7 +33,7 @@ export default ({
             <Card
               suit={card}
               key={index}
-              onDoubleClick={() => onDrawPool(card)}
+              onDoubleClick={() => onPoolDraw(card)}
             />
           ))}
         </Pool>
