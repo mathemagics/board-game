@@ -23,6 +23,9 @@ export const Controls = styled.div`
 `;
 
 export const Hand = styled.div`
+  width: 600px;
+  height: 42px;
+  margin-top: 16px;
   display: flex;
   flex-flow: row wrap;
   & > *:not(first-child) {
@@ -33,13 +36,20 @@ export const Hand = styled.div`
 export const Info = styled.span`
   padding: 8px;
 
-  &:first-child {
-    margin-right: 8px;
+  &:not(first-child) {
+    margin-left: 16px;
   }
 `;
 
 export const InfoBar = styled.div`
-  height: 40px;
+  width: 600px;
+  height: 42px;
   display: flex;
   align-items: center;
+`;
+
+export const Pool = styled.div`
+  & > *:not(first-child) {
+    margin-left: 4px;
+  }
 `;

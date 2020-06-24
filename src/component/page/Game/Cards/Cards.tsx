@@ -7,7 +7,8 @@ import {
   Controls,
   Hand,
   Info,
-  InfoBar
+  InfoBar,
+  Pool
 } from "./Cards.style";
 
 export default ({
@@ -15,18 +16,29 @@ export default ({
   discard,
   hand,
   onDraw,
+  onDrawPool,
   onDiscard,
   onReshuffle,
-  onTakeDiscard
+  onTakeDiscard,
+  pool
 }) => {
   return (
     <Container>
       <InfoBar>
         <Info>Deck: {deck.length}</Info>
         <Info>Discard: {discard.length}</Info>
-
-        <span style={{ marginLeft: 16, width: 142 }}>
-          <span style={{ marginRight: 8 }}>Last Discard:</span>
+        <Info>Pool:</Info>
+        <Pool>
+          {pool.map((card, index) => (
+            <Card
+              suit={card}
+              key={index}
+              onDoubleClick={() => onDrawPool(card)}
+            />
+          ))}
+        </Pool>
+        <Info style={{ marginRight: 8 }}>Last Discard:</Info>
+        <span>
           {discard.length > 0 && (
             <Card
               suit={discard[discard.length - 1]}
@@ -35,15 +47,8 @@ export default ({
           )}
         </span>
       </InfoBar>
-      <Controls>
-        <Button type="button" onClick={onDraw}>
-          Draw
-        </Button>
-        <Button type="button" onClick={onReshuffle}>
-          Reshuffle
-        </Button>
-      </Controls>
       <Hand>
+        <Info>Hand:</Info>
         {hand
           .slice()
           .sort()
@@ -55,6 +60,14 @@ export default ({
             />
           ))}
       </Hand>
+      <Controls>
+        <Button type="button" onClick={onDraw}>
+          Draw
+        </Button>
+        <Button type="button" onClick={onReshuffle}>
+          Reshuffle
+        </Button>
+      </Controls>
     </Container>
   );
 };

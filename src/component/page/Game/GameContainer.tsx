@@ -70,6 +70,7 @@ export default () => {
         deck={game.deck}
         discard={game.discard}
         hand={game.players[uid].hand}
+        pool={game.pool}
         updateGame={updateGame}
       />
     </div>

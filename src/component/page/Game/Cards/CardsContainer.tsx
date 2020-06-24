@@ -10,11 +10,12 @@ export default ({ updateGame }: { deck: [string] }) => {
   const { gameID } = useParams();
   const { uid } = useSelector(state => state.firebase.auth);
   const {
+    deck,
+    discard,
     players: {
       [uid]: { hand }
     },
-    deck,
-    discard
+    pool
   } = useSelector(
     ({ firestore: { data } }) => data.games && data.games[gameID]
   );
@@ -51,6 +52,7 @@ export default ({ updateGame }: { deck: [string] }) => {
       onDraw={handleDraw}
       onReshuffle={handleReshuffle}
       onTakeDiscard={handleTakeDiscard}
+      pool={pool}
     />
   );
 };

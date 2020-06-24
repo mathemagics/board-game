@@ -28,7 +28,12 @@ export const shuffle = array => {
   return array;
 };
 
-export const createDeck = () => shuffle(newDeck());
+export const createDeck = () => {
+  const deck = shuffle(newDeck());
+  const pool = [deck[0], deck[1], deck[2]];
+  const restDeck = deck.slice(3, deck.length);
+  return [restDeck, pool];
+};
 
 export const drawCard = deck => {
   const randomIndex = Math.floor(Math.random() * deck.length);

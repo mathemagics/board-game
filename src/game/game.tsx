@@ -6,7 +6,7 @@ import { createObjectBoard } from "./object";
 
 export const createGame = ({ userID }) => {
   const board = createBoard();
-  const deck = createDeck();
+  const [deck, pool] = createDeck();
   const heroes = createHeroBoard();
   const objects = createObjectBoard();
   const player = createPlayer(userID);
@@ -16,6 +16,7 @@ export const createGame = ({ userID }) => {
     discard: [],
     heroes,
     objects,
-    players: { [userID]: player }
+    players: { [userID]: player },
+    pool
   };
 };
