@@ -7,7 +7,7 @@ export default () => {
   return (
     <div>
       <div>
-        <div>
+        <div style={{ marginBottom: 24 }}>
           <button
             type="button"
             onClick={() => {
@@ -18,21 +18,21 @@ export default () => {
           </button>
         </div>
         <div>
-          <input
-            style={{ border: "1px solid black" }}
-            onChange={e => {
-              setGameID(e.target.value);
-            }}
-            value={gameID}
-          />
           <button
             type="button"
             onClick={() => {
               history.push(`/game/${gameID}`);
             }}
           >
-            Join Game
+            Join Game:
           </button>
+          <input
+            style={{ border: "1px solid black", marginLeft: 8 }}
+            onChange={e => {
+              setGameID(e.target.value);
+            }}
+            value={gameID}
+          />
         </div>
       </div>
     </div>

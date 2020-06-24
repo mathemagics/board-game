@@ -37,3 +37,9 @@ export const Info = styled.span`
     margin-right: 8px;
   }
 `;
+
+export const InfoBar = styled.div`
+  height: 40px;
+  display: flex;
+  align-items: center;
+`;

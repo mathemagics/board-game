@@ -1,15 +1,40 @@
 import * as React from "react";
 import Card from "component/base/Card";
 
-import { Button, Container, Controls, Hand, Info } from "./Cards.style";
+import {
+  Button,
+  Container,
+  Controls,
+  Hand,
+  Info,
+  InfoBar
+} from "./Cards.style";
 
-export default ({ deck, discard, hand, onDraw, onDiscard, onReshuffle }) => {
+export default ({
+  deck,
+  discard,
+  hand,
+  onDraw,
+  onDiscard,
+  onReshuffle,
+  onTakeDiscard
+}) => {
   return (
     <Container>
-      <div>
-        <Info>Remaining Cards: {deck.length}</Info>
-        <Info>Discarded Cards: {discard.length}</Info>
-      </div>
+      <InfoBar>
+        <Info>Deck: {deck.length}</Info>
+        <Info>Discard: {discard.length}</Info>
+
+        <span style={{ marginLeft: 16, width: 142 }}>
+          <span style={{ marginRight: 8 }}>Last Discard:</span>
+          {discard.length > 0 && (
+            <Card
+              suit={discard[discard.length - 1]}
+              onDoubleClick={onTakeDiscard}
+            />
+          )}
+        </span>
+      </InfoBar>
       <Controls>
         <Button type="button" onClick={onDraw}>
           Draw

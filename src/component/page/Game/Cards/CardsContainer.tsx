@@ -36,6 +36,12 @@ export default ({ updateGame }: { deck: [string] }) => {
     updateGame({ deck: newDeck, discard: [] });
   };
 
+  const handleTakeDiscard = () => {
+    const newHand = [...hand, discard[discard.length - 1]];
+    const newDiscard = discard.slice(0, discard.length - 1);
+    updateGame({ [`players.${uid}.hand`]: newHand, discard: newDiscard });
+  };
+
   return (
     <Cards
       deck={deck}
@@ -44,6 +50,7 @@ export default ({ updateGame }: { deck: [string] }) => {
       onDiscard={handleDiscard}
       onDraw={handleDraw}
       onReshuffle={handleReshuffle}
+      onTakeDiscard={handleTakeDiscard}
     />
   );
 };
