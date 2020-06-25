@@ -1,10 +1,14 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
+  align-items: center;
   display: flex;
-  flex-flow: row wrap;
+  height: ${({theme}) => theme.sizes.cardSize};
 `;
 
-export const Label = styled.span`
-  padding: 8px;
+export const Cards = styled.div`
+  align-items: center;
+  display: flex;
+  flex-flow: row wrap;
+  margin-left: 8px;
 `;

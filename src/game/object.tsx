@@ -5,6 +5,6 @@ export const objects = ['Rock'];
 export const createObjectBoard = () => {
   return GridGenerator.rectangle(1, 1).map((hexagon, index) => ({
     ...hexagon,
-    text: objects[index]
+    text: objects[index],
   }));
 };

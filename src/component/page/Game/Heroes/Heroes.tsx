@@ -5,12 +5,9 @@ import {Hexagon, Text, Pattern, HexUtils} from 'react-hexgrid';
 import {Map} from './Heroes.styles';
 
 export const Heroes = ({heroes, updateHeroes}) => {
-  const onDragStart = (_event, _source) => {
-    // Could do something on onDragStart as well, if you wish
-  };
+  const onDragStart = (_event, _source) => {};
 
-  // onDragEnd you can do some logic, e.g. to clean up hexagon if drop was success
-  const onDragEnd = (event, source, success) => {
+  const onDragEnd = (_event, _source, _success) => {
     // TODO This removes the hero from the hero grid. do we want that? who knows
     // if (!success) {
     //   return;

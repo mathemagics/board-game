@@ -13,12 +13,12 @@ export const heroes = [
   'Lion',
   'Panda',
   'Pig',
-  'Polar'
+  'Polar',
 ];
 
 export const createHeroBoard = () => {
   return GridGenerator.rectangle(3, 4).map((hexagon, index) => ({
     ...hexagon,
-    text: heroes[index]
+    text: heroes[index],
   }));
 };

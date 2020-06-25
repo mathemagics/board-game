@@ -52,8 +52,6 @@ export const Board = ({board, updateBoard}) => {
 
   const onDragEnd = React.useCallback(
     (event, source, success) => {
-      console.log('onDrop', source);
-
       if (!success) {
         return;
       }

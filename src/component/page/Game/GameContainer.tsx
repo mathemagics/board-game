@@ -20,8 +20,8 @@ export const Game = () => {
   useFirestoreConnect([
     {
       collection: 'games',
-      doc: gameID
-    }
+      doc: gameID,
+    },
   ]);
 
   const game = useSelector(
@@ -62,7 +62,7 @@ export const Game = () => {
   const currentHand = (game.players[uid] && game.players[uid].hand) || [];
 
   return (
-    <div>
+    <>
       <HexGrid width={1000} height={550} viewBox="-65 -50 100 100">
         <Board updateBoard={updateBoard} board={game.board} />
         <Heroes updateHeroes={updateHeroes} heroes={game.heroes} />
@@ -77,6 +77,6 @@ export const Game = () => {
           updateGame={updateGame}
         />
       )}
-    </div>
+    </>
   );
 };

@@ -17,6 +17,6 @@ export const createGame = ({userID}) => {
     heroes,
     objects,
     players: {[userID]: player},
-    pool
+    pool,
   };
 };

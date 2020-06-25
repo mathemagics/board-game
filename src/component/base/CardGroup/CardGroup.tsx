@@ -1,6 +1,8 @@
 import * as React from 'react';
 
-import {Container, Label} from './CardGroup.style';
+import {Label} from 'component/base/Label';
+
+import {Container, Cards} from './CardGroup.style';
 import {Card} from '../Card';
 
 export const CardGroup = ({cards, label, isSorted, onCardDoubleClick}) => {
@@ -9,13 +11,15 @@ export const CardGroup = ({cards, label, isSorted, onCardDoubleClick}) => {
   return (
     <Container>
       <Label>{label}</Label>
-      {orderedCards.map((card, index) => (
-        <Card
-          suit={card}
-          key={index}
-          onDoubleClick={() => onCardDoubleClick(card)}
-        />
-      ))}
+      <Cards>
+        {orderedCards.map((card, index) => (
+          <Card
+            suit={card}
+            key={index}
+            onDoubleClick={() => onCardDoubleClick(card)}
+          />
+        ))}
+      </Cards>
     </Container>
   );
 };

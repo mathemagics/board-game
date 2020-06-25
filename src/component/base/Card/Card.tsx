@@ -4,7 +4,7 @@ import {
   GiCutDiamond,
   GiSpadeSkull,
   GiClubs,
-  GiCrownedSkull
+  GiCrownedSkull,
 } from 'react-icons/gi';
 
 import {Container} from './Card.style';

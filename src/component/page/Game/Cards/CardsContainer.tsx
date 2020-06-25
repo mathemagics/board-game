@@ -4,11 +4,10 @@ import {useParams} from 'react-router-dom';
 
 import {drawCard, discardCard, shuffle} from 'game/card';
 
+import {SpacedContent} from 'component/base/SpacedContent';
 import {Button} from 'component/base/Button';
 import {CardGroup} from 'component/base/CardGroup';
-import {InfoBar} from './InfoBar';
-
-import {Container, Controls} from './Cards.style';
+import {Label} from 'component/base/Label';
 
 // TODO don't get updateGame from props
 export const Cards = ({updateGame}: {deck: [string]}) => {
@@ -18,43 +17,46 @@ export const Cards = ({updateGame}: {deck: [string]}) => {
     deck,
     discard,
     players: {
-      [uid]: {hand}
+      [uid]: {hand},
     },
-    pool
+    pool,
   } = useSelector(({firestore: {data}}) => data.games && data.games[gameID]);
 
   const handleHandClick = card => {
     const [discardedHand, newDiscard] = discardCard({card, hand, discard});
     updateGame({
       discard: newDiscard,
-      [`players.${uid}.hand`]: discardedHand
+      [`players.${uid}.hand`]: discardedHand,
     });
+  };
+  const handleReshuffle = () => {
+    const combinedDeck = [...discard, ...deck];
+    const newDeck = shuffle(combinedDeck);
+    updateGame({deck: newDeck, discard: []});
   };
 
   const handleDraw = () => {
+    if (deck.length === 0) {
+      handleReshuffle();
+    }
+
     const [card, newDeck] = drawCard(deck);
     const newHand = [...hand, card];
     updateGame({deck: newDeck, [`players.${uid}.hand`]: newHand});
   };
 
   const handlePoolDraw = poolCard => {
-    // TODO move this into game mechanics
-    const newDiscard = [...discard, poolCard];
+    const activeDeck = deck.length === 0 ? shuffle([...discard]) : deck;
+    const newDiscard = deck.length === 0 ? [poolCard] : [...discard, poolCard];
     const index = pool.indexOf(poolCard);
-    const [card, newDeck] = drawCard(deck);
+    const [card, newDeck] = drawCard(activeDeck);
     const newPool = [...pool];
     newPool[index] = card;
     updateGame({
       deck: newDeck,
       discard: newDiscard,
-      pool: newPool
+      pool: newPool,
     });
-  };
-
-  const handleReshuffle = () => {
-    const combinedDeck = [...discard, ...deck];
-    const newDeck = shuffle(combinedDeck);
-    updateGame({deck: newDeck, discard: []});
   };
 
   const handleTakeDiscard = () => {
@@ -64,29 +66,42 @@ export const Cards = ({updateGame}: {deck: [string]}) => {
   };
 
   return (
-    <Container>
-      <InfoBar
-        deckCount={deck.length}
-        discardCount={discard.length}
-        lastDiscard={discard[discard.length - 1]}
-        onTakeDiscard={handleTakeDiscard}
-        onPoolDraw={handlePoolDraw}
-        pool={pool}
-      />
+    <SpacedContent header={2}>
+      <SpacedContent horizontal>
+        <Label>Deck:</Label>
+        <span>{deck.length}</span>
+        <Label>Discard:</Label>
+        <span>{discard.length}</span>
+        <CardGroup
+          label="Pool:"
+          cards={pool}
+          isSorted
+          onCardDoubleClick={handlePoolDraw}
+        />
+        <CardGroup
+          label="Last Discard:"
+          cards={[discard[discard.length - 1]]}
+          isSorted
+          onCardDoubleClick={handleTakeDiscard}
+        />
+      </SpacedContent>
       <CardGroup
         label="Hand:"
         cards={hand}
         isSorted
         onCardDoubleClick={handleHandClick}
       />
-      <Controls>
-        <Button type="button" onClick={handleDraw}>
-          Draw
-        </Button>
-        <Button type="button" onClick={handleReshuffle}>
-          Reshuffle
-        </Button>
-      </Controls>
-    </Container>
+      <SpacedContent horiztonal>
+        {deck.length === 0 ? (
+          <Button type="button" onClick={handleReshuffle}>
+            Reshuffle
+          </Button>
+        ) : (
+          <Button type="button" onClick={handleDraw}>
+            Draw
+          </Button>
+        )}
+      </SpacedContent>
+    </SpacedContent>
   );
 };

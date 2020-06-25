@@ -12,7 +12,7 @@
     "prettier/react"
   ],
   "rules":{
-    "prettier/prettier": ["error", { "singleQuote": true, "bracketSpacing": false }],
+    "prettier/prettier": ["error", { "singleQuote": true, "bracketSpacing": false, "trailingComma": "es5" }],
     "@typescript-eslint/no-unused-vars": ["error", {
       "varsIgnorePattern": "^_",
       "argsIgnorePattern": "^_"

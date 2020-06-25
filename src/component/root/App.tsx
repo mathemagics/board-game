@@ -8,7 +8,7 @@ import {
   ReactReduxFirebaseProvider,
   firebaseReducer,
   isLoaded,
-  isEmpty
+  isEmpty,
 } from 'react-redux-firebase';
 import {createFirestoreInstance, firestoreReducer} from 'redux-firestore'; // <- needed if using firestore
 
@@ -29,7 +29,7 @@ import {fbConfig} from '../../../secret';
 // react-redux-firebase config
 const rrfConfig = {
   userProfile: 'users',
-  useFirestoreForProfile: true
+  useFirestoreForProfile: true,
 };
 
 firebase.initializeApp(fbConfig);
@@ -37,7 +37,7 @@ firebase.firestore();
 
 const rootReducer = combineReducers({
   firebase: firebaseReducer,
-  firestore: firestoreReducer
+  firestore: firestoreReducer,
 });
 
 // Create store with reducers and initial state
@@ -48,7 +48,7 @@ const rrfProps = {
   firebase,
   config: rrfConfig,
   dispatch: store.dispatch,
-  createFirestoreInstance
+  createFirestoreInstance,
 };
 
 const PrivateRoute = ({children, ...rest}) => {
