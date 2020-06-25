@@ -1,49 +1,45 @@
-import * as React from "react";
+import * as React from 'react';
 import {
   GiHeartBeats,
   GiCutDiamond,
   GiSpadeSkull,
   GiClubs,
   GiCrownedSkull
-} from "react-icons/gi";
+} from 'react-icons/gi';
 
-import { Container } from "./Card.style";
+import {Container} from './Card.style';
 
-export default ({ suit, ...rest }) => {
+export const Card = ({suit, ...rest}) => {
   let Icon;
   let color;
   switch (suit) {
-    case "diamond":
+    case 'diamond':
       Icon = GiCutDiamond;
-      color = "blue";
+      color = 'blue';
       break;
 
-    case "heart":
+    case 'heart':
       Icon = GiHeartBeats;
-      color = "red";
+      color = 'red';
       break;
 
-    case "spade":
+    case 'spade':
       Icon = GiSpadeSkull;
-      color = "black";
+      color = 'black';
       break;
 
-    case "face":
+    case 'face':
       Icon = GiCrownedSkull;
-      color = "orange";
+      color = 'orange';
       break;
 
-    case "club":
+    case 'club':
       Icon = GiClubs;
-      color = "green";
+      color = 'green';
       break;
 
     default:
       break;
   }
-  return (
-    <Container {...rest}>
-      <Icon color={color} />
-    </Container>
-  );
+  return <Container {...rest}>{Icon && <Icon color={color} />}</Container>;
 };

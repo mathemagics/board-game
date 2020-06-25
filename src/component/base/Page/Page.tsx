@@ -1,9 +1,11 @@
-import * as React from "react";
+import * as React from 'react';
 
-import { Container } from "./Page.style";
+import {Container} from './Page.style';
 
 interface PageProps {
   children: React.ReactNode;
 }
 
-export default ({ children }: PageProps) => <Container>{children}</Container>;
+export const Page = ({children}: PageProps) => (
+  <Container>{children}</Container>
+);

@@ -1,1 +1,1 @@
-export { default } from "./CardsContainer";
+export {Cards} from './CardsContainer';

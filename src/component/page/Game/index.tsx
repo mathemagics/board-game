@@ -1,1 +1,1 @@
-export { default } from "./GameContainer";
+export {Game} from './GameContainer';

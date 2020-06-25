@@ -1,10 +1,10 @@
-import * as React from "react";
+import * as React from 'react';
 
-import { Hexagon, Text, Pattern, HexUtils } from "react-hexgrid";
+import {Hexagon, Text, Pattern, HexUtils} from 'react-hexgrid';
 
-import { Map } from "./Heroes.styles";
+import {Map} from './Heroes.styles';
 
-const Heroes = ({ heroes, updateHeroes }) => {
+export const Heroes = ({heroes, updateHeroes}) => {
   const onDragStart = (_event, _source) => {
     // Could do something on onDragStart as well, if you wish
   };
@@ -28,10 +28,10 @@ const Heroes = ({ heroes, updateHeroes }) => {
 
   return (
     <Map
-      size={{ x: 6, y: 6 }}
+      size={{x: 6, y: 6}}
       flat={false}
       spacing={1.01}
-      origin={{ x: 40, y: -30 }}
+      origin={{x: 40, y: -30}}
     >
       {heroes.map((hex, i) => (
         <Hexagon
@@ -40,7 +40,7 @@ const Heroes = ({ heroes, updateHeroes }) => {
           r={hex.r}
           s={hex.s}
           fill={hex.image ? HexUtils.getID(hex) : null}
-          data={{ ...hex, new: true }}
+          data={{...hex, new: true}}
           onDragStart={(e, h) => onDragStart(e, h)}
           onDragEnd={(e, h, s) => onDragEnd(e, h, s)}
         >
@@ -51,5 +51,3 @@ const Heroes = ({ heroes, updateHeroes }) => {
     </Map>
   );
 };
-
-export default Heroes;

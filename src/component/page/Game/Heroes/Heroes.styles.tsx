@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import { Layout } from "react-hexgrid";
+import styled from 'styled-components';
+import {Layout} from 'react-hexgrid';
 
 export const Map = styled(Layout)`
   background: white;

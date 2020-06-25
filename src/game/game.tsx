@@ -1,10 +1,10 @@
-import { createBoard } from "./board";
-import { createDeck } from "./card";
-import { createPlayer } from "./player";
-import { createHeroBoard } from "./hero";
-import { createObjectBoard } from "./object";
+import {createBoard} from './board';
+import {createDeck} from './card';
+import {createPlayer} from './player';
+import {createHeroBoard} from './hero';
+import {createObjectBoard} from './object';
 
-export const createGame = ({ userID }) => {
+export const createGame = ({userID}) => {
   const board = createBoard();
   const [deck, pool] = createDeck();
   const heroes = createHeroBoard();
@@ -16,7 +16,7 @@ export const createGame = ({ userID }) => {
     discard: [],
     heroes,
     objects,
-    players: { [userID]: player },
+    players: {[userID]: player},
     pool
   };
 };

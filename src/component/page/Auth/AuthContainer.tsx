@@ -1,14 +1,14 @@
-import * as React from "react";
-import { useSelector } from "react-redux";
-import { useFirebase, isLoaded, isEmpty } from "react-redux-firebase";
-import { Redirect } from "react-router-dom";
+import * as React from 'react';
+import {useSelector} from 'react-redux';
+import {useFirebase, isLoaded, isEmpty} from 'react-redux-firebase';
+import {Redirect} from 'react-router-dom';
 
-export default () => {
+export const Auth = () => {
   const firebase = useFirebase();
   const auth = useSelector(state => state.firebase.auth);
 
   const loginWithGoogle = () => {
-    return firebase.login({ provider: "google", type: "popup" });
+    return firebase.login({provider: 'google', type: 'popup'});
   };
 
   if (!isLoaded(auth)) {
@@ -23,7 +23,7 @@ export default () => {
             Login With Google
           </button>
         ) : (
-          <Redirect to={{ pathname: "home" }} />
+          <Redirect to={{pathname: 'home'}} />
         )}
       </div>
     </div>

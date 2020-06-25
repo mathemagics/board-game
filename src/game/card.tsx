@@ -1,8 +1,8 @@
-export const HEART = "heart";
-export const SPADE = "spade";
-export const DIAMOND = "diamond";
-export const CLUB = "club";
-export const FACE = "face";
+export const HEART = 'heart';
+export const SPADE = 'spade';
+export const DIAMOND = 'diamond';
+export const CLUB = 'club';
+export const FACE = 'face';
 
 const COUNT = 10;
 
@@ -44,7 +44,7 @@ export const drawCard = deck => {
   return [card, remainingDeck];
 };
 
-export const discardCard = ({ card, hand, discard }) => {
+export const discardCard = ({card, hand, discard}) => {
   const newHand = [...hand];
   const index = newHand.indexOf(card);
   if (index > -1) {

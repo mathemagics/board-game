@@ -1,31 +1,31 @@
-import * as React from "react";
-import { useSelector } from "react-redux";
-import { useFirestore, useFirestoreConnect } from "react-redux-firebase";
-import { HexGrid } from "react-hexgrid";
-import { useParams } from "react-router-dom";
+import * as React from 'react';
+import {useSelector} from 'react-redux';
+import {useFirestore, useFirestoreConnect} from 'react-redux-firebase';
+import {HexGrid} from 'react-hexgrid';
+import {useParams} from 'react-router-dom';
 
-import { createPlayer } from "game/player";
+import {createPlayer} from 'game/player';
 
-import Board from "./Board";
-import Cards from "./Cards";
-import Heroes from "./Heroes";
-import Objects from "./Objects";
+import {Board} from './Board';
+import {Cards} from './Cards';
+import {Heroes} from './Heroes';
+import {Objects} from './Objects';
 
-export default () => {
-  const { gameID } = useParams();
+export const Game = () => {
+  const {gameID} = useParams();
 
   const fireStore = useFirestore();
-  const { uid } = useSelector(state => state.firebase.auth);
+  const {uid} = useSelector(state => state.firebase.auth);
 
   useFirestoreConnect([
     {
-      collection: "games",
+      collection: 'games',
       doc: gameID
     }
   ]);
 
   const game = useSelector(
-    ({ firestore: { data } }) => data.games && data.games[gameID]
+    ({firestore: {data}}) => data.games && data.games[gameID]
   );
 
   if (!game) {
@@ -34,25 +34,25 @@ export default () => {
 
   const updateGame = args => {
     fireStore
-      .collection("games")
+      .collection('games')
       .doc(gameID)
       .update(args);
   };
 
   const updateBoard = board => {
-    updateGame({ board });
+    updateGame({board});
   };
 
   const updateHeroes = heroes => {
-    updateGame({ heroes });
+    updateGame({heroes});
   };
 
   const updateObjects = objects => {
-    updateGame({ objects });
+    updateGame({objects});
   };
 
   const updatePlayer = player => {
-    updateGame({ [`players.${uid}`]: player });
+    updateGame({[`players.${uid}`]: player});
   };
 
   if (!game.players[uid]) {

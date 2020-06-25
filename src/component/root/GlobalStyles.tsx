@@ -1,7 +1,7 @@
-import { createGlobalStyle } from "styled-components";
+import {createGlobalStyle} from 'styled-components';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-export default createGlobalStyle`
+export const GlobalStyles = createGlobalStyle`
   a,
   abbr,
   acronym,

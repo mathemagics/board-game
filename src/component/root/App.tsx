@@ -1,39 +1,34 @@
-import * as React from "react";
-import { ThemeProvider } from "styled-components";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Redirect
-} from "react-router-dom";
-import { Provider, useSelector } from "react-redux";
-import firebase from "firebase/app";
-import { createStore, combineReducers } from "redux";
+import * as React from 'react';
+import {ThemeProvider} from 'styled-components';
+import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
+import {Provider, useSelector} from 'react-redux';
+import firebase from 'firebase/app';
+import {createStore, combineReducers} from 'redux';
 import {
   ReactReduxFirebaseProvider,
   firebaseReducer,
   isLoaded,
   isEmpty
-} from "react-redux-firebase";
-import { createFirestoreInstance, firestoreReducer } from "redux-firestore"; // <- needed if using firestore
+} from 'react-redux-firebase';
+import {createFirestoreInstance, firestoreReducer} from 'redux-firestore'; // <- needed if using firestore
 
-import Page from "component/base/Page";
-import Auth from "component/page/Auth";
-import Home from "component/page/Home";
-import Game from "component/page/Game";
-import NewGame from "component/page/Game/New";
+import {Page} from 'component/base/Page';
+import {Auth} from 'component/page/Auth';
+import {Home} from 'component/page/Home';
+import {Game} from 'component/page/Game';
+import {NewGame} from 'component/page/Game/NewGame';
 
-import theme from "./theme";
-import GlobalStyles from "./GlobalStyles";
+import {theme} from './theme';
+import {GlobalStyles} from './GlobalStyles';
 
-import "firebase/auth";
-import "firebase/firestore";
+import 'firebase/auth';
+import 'firebase/firestore';
 
-import { fbConfig } from "../../../secret";
+import {fbConfig} from '../../../secret';
 
 // react-redux-firebase config
 const rrfConfig = {
-  userProfile: "users",
+  userProfile: 'users',
   useFirestoreForProfile: true
 };
 
@@ -56,22 +51,22 @@ const rrfProps = {
   createFirestoreInstance
 };
 
-const PrivateRoute = ({ children, ...rest }) => {
+const PrivateRoute = ({children, ...rest}) => {
   const auth = useSelector(state => state.firebase.auth);
   if (isLoaded(auth) && isEmpty(auth)) {
-    firebase.login({ provider: "google", type: "popup" });
+    firebase.login({provider: 'google', type: 'popup'});
   }
   return (
     <Route
       {...rest}
-      render={({ location }) =>
+      render={() =>
         isLoaded(auth) && !isEmpty(auth) ? children : <div>Logging In...</div>
       }
     />
   );
 };
 
-export default () => (
+export const App = () => (
   <>
     <GlobalStyles />
     <Provider store={store}>

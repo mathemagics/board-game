@@ -1,16 +1,16 @@
-import * as React from "react";
-import { Text, HexUtils } from "react-hexgrid";
+import * as React from 'react';
+import {Text, HexUtils} from 'react-hexgrid';
 
-import { Map, Hex } from "./Board.styles";
+import {Map, Hex} from './Board.styles';
 
-const Board = ({ board, updateBoard }) => {
+export const Board = ({board, updateBoard}) => {
   const [next, setNext] = React.useState();
 
   const onDrop = React.useCallback(
     (event, source, targetProps) => {
       if (targetProps.data.new) {
         const hexas = board.map(hex => {
-          const result = { ...hex };
+          const result = {...hex};
           if (HexUtils.equals(source.state.hex, hex)) {
             result.text = targetProps.data.text;
           }
@@ -19,7 +19,7 @@ const Board = ({ board, updateBoard }) => {
 
         updateBoard(hexas);
       }
-      setNext({ hex: source.state.hex, text: targetProps.data.text });
+      setNext({hex: source.state.hex, text: targetProps.data.text});
     },
     [board, next]
   );
@@ -40,7 +40,7 @@ const Board = ({ board, updateBoard }) => {
         HexUtils.equals(source.state.hex, blockedHex)
       );
 
-      const { text } = source.props.data;
+      const {text} = source.props.data;
       // Allow drop, if not blocked and there's no content already
       if (!blocked && !text) {
         // Call preventDefault if you want to allow drop
@@ -52,14 +52,14 @@ const Board = ({ board, updateBoard }) => {
 
   const onDragEnd = React.useCallback(
     (event, source, success) => {
-      console.log("onDrop", source);
+      console.log('onDrop', source);
 
       if (!success) {
         return;
       }
 
       const hexas = board.map(hex => {
-        const result = { ...hex };
+        const result = {...hex};
         if (HexUtils.equals(source.state.hex, hex)) {
           result.text = null;
         }
@@ -76,7 +76,7 @@ const Board = ({ board, updateBoard }) => {
 
   const onDoubleClick = (event, source) => {
     const hexas = board.map(hex => {
-      const result = { ...hex };
+      const result = {...hex};
       if (HexUtils.equals(source.state.hex, hex)) {
         result.text = null;
       }
@@ -87,10 +87,10 @@ const Board = ({ board, updateBoard }) => {
 
   return (
     <Map
-      size={{ x: 5.5, y: 5.5 }}
+      size={{x: 5.5, y: 5.5}}
       flat={false}
       spacing={1.01}
-      origin={{ x: -40, y: 0 }}
+      origin={{x: -40, y: 0}}
     >
       {board.map((hex, i) => {
         const starting =
@@ -124,5 +124,3 @@ const Board = ({ board, updateBoard }) => {
     </Map>
   );
 };
-
-export default Board;

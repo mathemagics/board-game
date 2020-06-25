@@ -1,4 +1,4 @@
-import { GridGenerator } from "react-hexgrid";
+import {GridGenerator} from 'react-hexgrid';
 
 export const createBoard = () =>
-  GridGenerator.hexagon(5).map(hex => ({ ...hex }));
+  GridGenerator.hexagon(5).map(hex => ({...hex}));

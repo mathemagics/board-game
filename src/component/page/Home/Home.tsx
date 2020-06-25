@@ -1,17 +1,17 @@
-import * as React from "react";
-import { useHistory } from "react-router-dom";
+import * as React from 'react';
+import {useHistory} from 'react-router-dom';
 
-export default () => {
+export const Home = () => {
   const history = useHistory();
-  const [gameID, setGameID] = React.useState("");
+  const [gameID, setGameID] = React.useState('');
   return (
     <div>
       <div>
-        <div style={{ marginBottom: 24 }}>
+        <div style={{marginBottom: 24}}>
           <button
             type="button"
             onClick={() => {
-              history.push("/game/new");
+              history.push('/game/new');
             }}
           >
             New Game
@@ -27,7 +27,7 @@ export default () => {
             Join Game:
           </button>
           <input
-            style={{ border: "1px solid black", marginLeft: 8 }}
+            style={{border: '1px solid black', marginLeft: 8}}
             onChange={e => {
               setGameID(e.target.value);
             }}

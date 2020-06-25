@@ -1,13 +1,13 @@
-import styled from "styled-components";
-import { Layout, Hexagon } from "react-hexgrid";
+import styled from 'styled-components';
+import {Layout, Hexagon} from 'react-hexgrid';
 
-const DEFAULT_COLOR = "#15788c";
-const STARTING_COLOR = "#59ACC2";
-const DRAW_COLOR = "#25B49A";
+const DEFAULT_COLOR = '#15788c';
+const STARTING_COLOR = '#59ACC2';
+const DRAW_COLOR = '#25B49A';
 
 export const Hex = styled(Hexagon)`
   background: white;
-  fill: ${({ starting, drawing }) =>
+  fill: ${({starting, drawing}) =>
     starting ? STARTING_COLOR : drawing ? DRAW_COLOR : DEFAULT_COLOR};
 `;
 
