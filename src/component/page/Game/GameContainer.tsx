@@ -51,13 +51,15 @@ export default () => {
     updateGame({ objects });
   };
 
-  const updatePlayer = board => {
+  const updatePlayer = player => {
     updateGame({ [`players.${uid}`]: player });
   };
 
   if (!game.players[uid]) {
     updatePlayer(createPlayer(uid));
   }
+
+  const currentHand = (game.players[uid] && game.players[uid].hand) || [];
 
   return (
     <div>
@@ -66,13 +68,15 @@ export default () => {
         <Heroes updateHeroes={updateHeroes} heroes={game.heroes} />
         <Objects updateObjects={updateObjects} objects={game.objects} />
       </HexGrid>
-      <Cards
-        deck={game.deck}
-        discard={game.discard}
-        hand={game.players[uid].hand}
-        pool={game.pool}
-        updateGame={updateGame}
-      />
+      {game.players[uid] && (
+        <Cards
+          deck={game.deck}
+          discard={game.discard}
+          hand={currentHand}
+          pool={game.pool}
+          updateGame={updateGame}
+        />
+      )}
     </div>
   );
 };
