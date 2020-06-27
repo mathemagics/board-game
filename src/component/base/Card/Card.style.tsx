@@ -5,4 +5,5 @@ export const Container = styled.button`
   border-radius: 2px;
   height: ${({theme}) => theme.sizes.cardSize};
   width: ${({theme}) => theme.sizes.cardSize};
+  background-color: white;
 `;

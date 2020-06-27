@@ -12,4 +12,8 @@ export const Cards = styled.div`
   display: flex;
   flex-flow: row wrap;
   margin-left: 8px;
+
+  & > *:not(:first-child) {
+    margin-left: 2px;
+  }
 `;
