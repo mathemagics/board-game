@@ -1,8 +1,6 @@
 import * as React from 'react';
-import {ThemeProvider} from 'styled-components';
-import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import {Provider, useSelector} from 'react-redux';
-import firebase from 'firebase/app';
+import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import {createStore, combineReducers} from 'redux';
 import {
   ReactReduxFirebaseProvider,
@@ -11,6 +9,8 @@ import {
   isEmpty,
 } from 'react-redux-firebase';
 import {createFirestoreInstance, firestoreReducer} from 'redux-firestore'; // <- needed if using firestore
+import {ThemeProvider} from 'styled-components';
+import firebase from 'firebase/app';
 
 import {Page} from 'component/base/Page';
 import {Auth} from 'component/page/Auth';

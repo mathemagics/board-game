@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {
+  GiArrowDunk,
   GiHeartBeats,
   GiCutDiamond,
   GiSpadeSkull,
@@ -9,7 +10,7 @@ import {
 
 import {Container} from './Card.style';
 
-export const Card = ({suit, ...rest}) => {
+export const Card = React.forwardRef(({children, suit, ...rest}, ref) => {
   let Icon;
   let color;
   switch (suit) {
@@ -38,8 +39,18 @@ export const Card = ({suit, ...rest}) => {
       color = 'green';
       break;
 
+    case 'plus':
+      Icon = GiArrowDunk;
+      color = 'black';
+      break;
+
     default:
       break;
   }
-  return <Container {...rest}>{Icon && <Icon color={color} />}</Container>;
-};
+  return (
+    <Container ref={ref} {...rest}>
+      {Icon && <Icon color={color} />}
+      {children}
+    </Container>
+  );
+});
