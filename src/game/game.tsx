@@ -11,6 +11,7 @@ export const createGame = ({userID}) => {
   const objects = createObjectBoard();
   const player = createPlayer(userID);
   return {
+    activePlayer: userID,
     board,
     deck,
     discard: [],
@@ -20,3 +21,22 @@ export const createGame = ({userID}) => {
     pool,
   };
 };
+
+type Card = string;
+type Hero = string;
+type Objects = string;
+type Player = {
+  hand: [Card];
+  heroes: [Hero];
+};
+
+interface Game {
+  board: [];
+  deck: [Card];
+  discard: [Card];
+  objects: [Objects];
+  players: [Player];
+  pool: [Card];
+  phase: 'character' | 'game';
+  activePlayer: string;
+}

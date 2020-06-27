@@ -16,7 +16,6 @@ import {Page} from 'component/base/Page';
 import {Auth} from 'component/page/Auth';
 import {Home} from 'component/page/Home';
 import {Game} from 'component/page/Game';
-import {NewGame} from 'component/page/Game/NewGame';
 
 import {theme} from './theme';
 import {GlobalStyles} from './GlobalStyles';
@@ -81,10 +80,7 @@ export const App = () => (
                 <PrivateRoute exact path="/home">
                   <Home />
                 </PrivateRoute>
-                <PrivateRoute path="/game/new">
-                  <NewGame />
-                </PrivateRoute>
-                <PrivateRoute path="/game/:gameID">
+                <PrivateRoute path="/game">
                   <Game />
                 </PrivateRoute>
               </Switch>

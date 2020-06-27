@@ -33,7 +33,6 @@ const FrameBindingContext = ({children}) => (
 
 // TODO don't get updateGame from props
 export const Cards = ({updateGame}: {deck: [string]}) => {
-  const {gameID} = useParams();
   const {uid} = useSelector(state => state.firebase.auth);
   const {deck, discard, players, pool, banned} = useSelector(
     ({firestore: {data}}) => data.games && data.games[gameID]

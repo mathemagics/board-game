@@ -1,18 +1,19 @@
 import * as React from 'react';
 import {useSelector} from 'react-redux';
 import {useFirestore} from 'react-redux-firebase';
-import {Redirect} from 'react-router-dom';
 
 import {createGame} from 'game/game';
+
+import {Game} from './GameContainer';
 
 export const NewGame = () => {
   const [gameID, setGameID] = React.useState();
 
   const firestore = useFirestore();
-  const auth = useSelector(state => state.firebase.auth);
+  const {uid} = useSelector(state => state.firebase.auth);
 
   React.useEffect(() => {
-    const newGame = createGame({userID: auth.uid});
+    const newGame = createGame({userID: uid});
 
     firestore
       .collection('games')
@@ -22,9 +23,5 @@ export const NewGame = () => {
       });
   }, []);
 
-  if (!gameID) {
-    return <div>Creating game...</div>;
-  }
-
-  return <Redirect to={{pathname: `${gameID}`}} />;
+  return gameID ? <Game /> : <div>Creating game...</div>;
 };
