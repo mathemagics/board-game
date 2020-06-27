@@ -116,7 +116,7 @@ export const Cards = ({updateGame}: {deck: [string]}) => {
     const newPool = [...pool];
     newPool[poolIndex] = suit;
 
-    const handIndex = hand.indexOf(suit);
+    const handIndex = hand.indexOf(handCard);
     const newHand = [...hand];
     newHand[handIndex] = poolCard;
 
