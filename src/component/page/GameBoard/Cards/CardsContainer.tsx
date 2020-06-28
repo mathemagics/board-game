@@ -1,39 +1,28 @@
 import * as React from 'react';
 import {useSelector} from 'react-redux';
-import {useParams} from 'react-router-dom';
-import {DndProvider} from 'react-dnd';
-import {HTML5Backend} from 'react-dnd-html5-backend';
-import {StyleSheetManager} from 'styled-components';
 
 import {drawCard, discardCard, shuffle} from 'game/card';
 
-import {SpacedContent} from 'component/base/SpacedContent';
-import {Card} from 'component/base/Card';
-import {CardGroup} from 'component/base/CardGroup';
-import {Label} from 'component/base/Label';
-import {Spinner} from 'component/base/Spinner';
+import {
+  Card,
+  CardGroup,
+  DnDFrame,
+  Label,
+  SpacedContent,
+  Spinner,
+} from 'component/base';
 
-import Frame, {FrameContextConsumer} from 'react-frame-component';
 import {BanPile} from '../BanPile';
 import {DiscardPile} from '../DiscardPile';
 import {PoolPile} from '../PoolPile';
 
-// TODO Move this out
-const FrameBindingContext = ({children}) => (
-  <FrameContextConsumer>
-    {({window, document}) => (
-      <StyleSheetManager target={document.head}>
-        <DndProvider backend={HTML5Backend} context={window}>
-          {children}
-        </DndProvider>
-      </StyleSheetManager>
-    )}
-  </FrameContextConsumer>
-);
-
 // TODO don't get updateGame from props
 export const Cards = ({updateGame}: {deck: [string]}) => {
-  const {uid} = useSelector(state => state.firebase.auth);
+  const {gameID, uid} = useSelector(({game, firebase}) => ({
+    gameID: game.activeGame,
+    uid: firebase.auth.uid,
+  }));
+
   const {deck, discard, players, pool, banned} = useSelector(
     ({firestore: {data}}) => data.games && data.games[gameID]
   );
@@ -150,41 +139,39 @@ export const Cards = ({updateGame}: {deck: [string]}) => {
   };
 
   return (
-    <Frame style={{width: '100%', height: 400}}>
-      <FrameBindingContext>
-        <SpacedContent header={2}>
-          <SpacedContent horizontal space={3}>
-            <SpacedContent horizontal space={1}>
-              <Label>Deck:</Label>
-              <Card onDoubleClick={handleDraw}>{deck.length}</Card>
-            </SpacedContent>
-            <PoolPile
-              onDrop={handlePoolDrop}
-              onCardDoubleClick={handlePoolDraw}
-              pool={pool}
-            />
-            <DiscardPile
-              card={discard[discard.length - 1]}
-              onDrop={handleDiscard}
-              onCardDoubleClick={handleTakeDiscard}
-            />
-            <BanPile card={banned} onDrop={handleBan} />
-            <SpacedContent horizontal space={1}>
-              <Label>Enemy:</Label>
-              <Card>{opponentHand ? opponentHand.length : <Spinner />}</Card>
-            </SpacedContent>
+    <DnDFrame style={{width: '100%', height: 400}}>
+      <SpacedContent header={2}>
+        <SpacedContent horizontal space={3}>
+          <SpacedContent horizontal space={1}>
+            <Label>Deck:</Label>
+            <Card onDoubleClick={handleDraw}>{deck.length}</Card>
           </SpacedContent>
-          <SpacedContent horizontal space={2}>
-            <CardGroup
-              name="hand"
-              label="Hand:"
-              cards={hand}
-              isSorted
-              onCardDoubleClick={handleHandClick}
-            />
+          <PoolPile
+            onDrop={handlePoolDrop}
+            onCardDoubleClick={handlePoolDraw}
+            pool={pool}
+          />
+          <DiscardPile
+            card={discard[discard.length - 1]}
+            onDrop={handleDiscard}
+            onCardDoubleClick={handleTakeDiscard}
+          />
+          <BanPile card={banned} onDrop={handleBan} />
+          <SpacedContent horizontal space={1}>
+            <Label>Enemy:</Label>
+            <Card>{opponentHand ? opponentHand.length : <Spinner />}</Card>
           </SpacedContent>
         </SpacedContent>
-      </FrameBindingContext>
-    </Frame>
+        <SpacedContent horizontal space={2}>
+          <CardGroup
+            name="hand"
+            label="Hand:"
+            cards={hand}
+            isSorted
+            onCardDoubleClick={handleHandClick}
+          />
+        </SpacedContent>
+      </SpacedContent>
+    </DnDFrame>
   );
 };

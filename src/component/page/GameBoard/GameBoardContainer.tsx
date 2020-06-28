@@ -7,9 +7,13 @@ import {Board} from './Board';
 import {Cards} from './Cards';
 import {Objects} from './Objects';
 
-export const GameBoard = ({gameID}) => {
+export const GameBoard = () => {
   const fireStore = useFirestore();
-  const {uid} = useSelector(state => state.firebase.auth);
+
+  const {gameID, uid} = useSelector(({game, firebase}) => ({
+    gameID: game.activeGame,
+    uid: firebase.auth.uid,
+  }));
 
   const game = useSelector(
     ({firestore: {data}}) => data.games && data.games[gameID]
@@ -18,8 +22,6 @@ export const GameBoard = ({gameID}) => {
   if (!game) {
     return <div>Loading Game...</div>;
   }
-
-  console.log('gggg', game);
 
   const updateGame = args => {
     fireStore

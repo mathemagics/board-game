@@ -2,15 +2,29 @@ import * as React from 'react';
 import {useSelector} from 'react-redux';
 import {useFirestore} from 'react-redux-firebase';
 
-export const CharacterSelect = ({gameID}) => {
+export const CharacterSelect = () => {
   const fireStore = useFirestore();
-  const {uid} = useSelector(state => state.firebase.auth);
 
-  const game = useSelector(
+  const {gameID, uid} = useSelector(({game, firebase: {auth}}) => ({
+    gameID: game.activeGame,
+    uid: auth.uid,
+  }));
+
+  const gameState = useSelector(
     ({firestore: {data}}) => data.games && data.games[gameID]
   );
 
-  if (!game) {
+  React.useEffect(() => {
+    if (!gameState.players[uid] && Object.keys(gameState.players).length < 2) {
+      const newPlayer = createPlayer(uid);
+      fireStore
+        .collection('games')
+        .doc(gameID)
+        .update({[`players.${uid}`]: newPlayer});
+    }
+  }, []);
+
+  if (!gameState) {
     return <div>Loading Game...</div>;
   }
 

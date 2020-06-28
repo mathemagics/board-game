@@ -1,16 +1,25 @@
 import * as React from 'react';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import {useFirestore} from 'react-redux-firebase';
 
 import {createGame} from 'game/game';
+import {setActiveGame} from './GameDuck';
 
 import {Game} from './GameContainer';
 
 export const NewGame = () => {
-  const [gameID, setGameID] = React.useState();
-
+  const dispatch = useDispatch();
   const firestore = useFirestore();
-  const {uid} = useSelector(state => state.firebase.auth);
+
+  const setGameID = React.useCallback(
+    gameID => dispatch(setActiveGame(gameID)),
+    [dispatch]
+  );
+
+  const {uid, gameID} = useSelector(({firebase, game}) => ({
+    uid: firebase.auth.uid,
+    gameID: game.activeGame,
+  }));
 
   React.useEffect(() => {
     const newGame = createGame({userID: uid});

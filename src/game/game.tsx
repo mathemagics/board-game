@@ -4,6 +4,12 @@ import {createPlayer} from './player';
 import {createHeroBoard} from './hero';
 import {createObjectBoard} from './object';
 
+// TODO this is a shitty enum
+export const GAME_PHASES = {
+  character: 'CHARACTER',
+  game: 'GAME',
+};
+
 export const createGame = ({userID}) => {
   const board = createBoard();
   const [deck, pool] = createDeck();
@@ -17,6 +23,7 @@ export const createGame = ({userID}) => {
     discard: [],
     heroes,
     objects,
+    phase: GAME_PHASES.character,
     players: {[userID]: player},
     pool,
   };
