@@ -1,3 +1,3 @@
 import * as React from 'react';
 
-export const CharacterChard = () => <div />;
+export const CharacterCard = ({children}) => <div>{children}</div>;

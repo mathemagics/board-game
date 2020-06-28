@@ -1,5 +1,3 @@
-import {GridGenerator} from 'react-hexgrid';
-
 export const heroes = [
   'Bird',
   'Cat',
@@ -20,8 +18,5 @@ export const heroes = [
 ].sort();
 
 export const createHeroBoard = () => {
-  return GridGenerator.rectangle(4, 4).map((hexagon, index) => ({
-    ...hexagon,
-    text: heroes[index],
-  }));
+  return heroes;
 };
