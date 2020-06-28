@@ -28,7 +28,7 @@ export const Heroes = ({heroes, updateHeroes}) => {
       size={{x: 6, y: 6}}
       flat={false}
       spacing={1.01}
-      origin={{x: 40, y: -30}}
+      origin={{x: 20, y: -30}}
     >
       {heroes.map((hex, i) => (
         <Hexagon

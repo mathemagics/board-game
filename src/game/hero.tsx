@@ -2,22 +2,25 @@ import {GridGenerator} from 'react-hexgrid';
 
 export const heroes = [
   'Bird',
+  'Bristle',
   'Cat',
-  'Chimp',
   'Cow',
   'Dino',
   'Dog',
+  'Frog',
   'H 1',
   'H 2',
+  'Hamster',
   'Hog',
+  'Kang',
   'Lion',
+  'Monkey',
   'Panda',
   'Pig',
-  'Polar',
-];
+].sort();
 
 export const createHeroBoard = () => {
-  return GridGenerator.rectangle(3, 4).map((hexagon, index) => ({
+  return GridGenerator.rectangle(4, 4).map((hexagon, index) => ({
     ...hexagon,
     text: heroes[index],
   }));
