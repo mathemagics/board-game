@@ -2,19 +2,19 @@ import {GridGenerator} from 'react-hexgrid';
 
 export const heroes = [
   'Bird',
-  'Bristle',
+  'Hog',
   'Cat',
   'Cow',
+  'Chimp',
   'Dino',
   'Dog',
   'Frog',
   'H 1',
   'H 2',
-  'Hamster',
   'Hog',
   'Kang',
   'Lion',
-  'Monkey',
+  'Mouse',
   'Panda',
   'Pig',
 ].sort();
