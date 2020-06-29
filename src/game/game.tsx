@@ -10,12 +10,12 @@ export const GAME_PHASES = {
   game: 'GAME',
 };
 
-export const createGame = ({userID}) => {
+export const createGame = ({userID, name}) => {
   const board = createBoard();
   const [deck, pool] = createDeck();
   const heroes = createHeroBoard();
   const objects = createObjectBoard();
-  const player = createPlayer(userID);
+  const player = createPlayer({userID, name});
   return {
     activePlayer: userID,
     board,

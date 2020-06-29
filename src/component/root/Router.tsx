@@ -2,27 +2,41 @@ import * as React from 'react';
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import {useSelector} from 'react-redux';
 import {isLoaded, isEmpty} from 'react-redux-firebase';
+import firebase from 'firebase/app';
+
+import {Button} from 'component/base';
 
 import {Auth} from 'component/page/Auth';
 import {Home} from 'component/page/Home';
-import {NewGame} from 'component/page/Game';
+import {NewGame} from 'component/page/NewGame';
+import {Game} from 'component/page/Game';
 
 const PrivateRoute = ({children, ...rest}) => {
   const auth = useSelector(state => state.firebase.auth);
-  if (isLoaded(auth) && isEmpty(auth)) {
-    firebase.login({provider: 'google', type: 'popup'});
-  }
+
+  const login = React.useCallback(() => {
+    if (isLoaded(auth) && isEmpty(auth)) {
+      firebase.login({provider: 'google', type: 'popup'});
+    }
+  });
+
   return (
     <Route
       {...rest}
       render={() =>
-        isLoaded(auth) && !isEmpty(auth) ? children : <div>Logging In...</div>
+        isLoaded(auth) && !isEmpty(auth) ? (
+          children
+        ) : (
+          <Button type="button" onClick={login}>
+            Log In...
+          </Button>
+        )
       }
     />
   );
 };
 
-export const PageRouter = ({props}) => (
+export const PageRouter = props => (
   <Router {...props}>
     <Switch>
       <Route exact path="/">
@@ -31,8 +45,11 @@ export const PageRouter = ({props}) => (
       <PrivateRoute exact path="/home">
         <Home />
       </PrivateRoute>
-      <PrivateRoute path="/game">
+      <PrivateRoute path="/game/new">
         <NewGame />
+      </PrivateRoute>
+      <PrivateRoute path="/game/:gameID">
+        <Game />
       </PrivateRoute>
     </Switch>
   </Router>

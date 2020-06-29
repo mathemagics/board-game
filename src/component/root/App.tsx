@@ -5,6 +5,8 @@ import {createFirestoreInstance} from 'redux-firestore';
 import {ThemeProvider} from 'styled-components';
 import firebase from 'firebase/app';
 
+import {Page} from 'component/base';
+
 import {theme} from './theme';
 import {GlobalStyles} from './GlobalStyles';
 import {store} from './createStore';
@@ -38,7 +40,9 @@ export const App = () => (
     <Provider store={store}>
       <ReactReduxFirebaseProvider {...rrfProps}>
         <ThemeProvider theme={theme}>
-          <PageRouter />
+          <Page>
+            <PageRouter />
+          </Page>
         </ThemeProvider>
       </ReactReduxFirebaseProvider>
     </Provider>
