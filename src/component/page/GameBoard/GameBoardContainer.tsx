@@ -23,6 +23,9 @@ export const GameBoard = () => {
     return <div>Loading Game...</div>;
   }
 
+  const isPlayer1 = player1 && player1.uid === uid;
+  const myPlayer = isPlayer1 ? player1 : player2;
+
   const updateGame = args => {
     fireStore
       .collection('games')
@@ -34,7 +37,7 @@ export const GameBoard = () => {
     updateGame({board});
   };
 
-  const currentHand = (game.players[uid] && game.players[uid].hand) || [];
+  const currentHand = (myPlayer && myPlayer.hand) || [];
 
   return (
     <>
@@ -42,7 +45,7 @@ export const GameBoard = () => {
         <Board updateBoard={updateBoard} board={game.board} />
         <Objects objects={game.objects} />
       </HexGrid>
-      {game.players[uid] && (
+      {myPlayer && (
         <Cards
           deck={game.deck}
           discard={game.discard}

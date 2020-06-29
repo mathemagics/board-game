@@ -44,18 +44,22 @@ export const Game = () => {
     return data.games && data.games[currentGameID];
   });
 
+  // TODO reconsider how we store players also Enum for `player1`, 'player2'
+  const myPlayer =
+    game && game.player1 && game.player1.uid === uid ? 'player1' : 'player2';
+
   React.useEffect(() => {
-    if (game && !game.players[uid] && Object.keys(game.players).length < 2) {
+    if (game && !game[myPlayer] && !(game.player1 && game.player2)) {
       const newPlayer = createPlayer({userID: uid, name});
 
       firestore
         .collection('games')
         .doc(gameID)
-        .update({[`players.${uid}`]: newPlayer});
+        .update({[myPlayer]: newPlayer});
     }
   }, [game]);
 
-  if (!game || !game.players[uid]) {
+  if (!game || !game[myPlayer]) {
     return <div>Loading Game...</div>;
   }
 

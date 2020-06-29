@@ -15,13 +15,16 @@ export const CharacterSelect = () => {
     myName: auth.displayName,
   }));
 
-  const {players, heroes} = useSelector(
+  const {player1, player2, heroes} = useSelector(
     ({firestore: {data}}) => data.games && data.games[gameID]
   );
 
-  const {heroes: myHeroes} = players[uid];
-  const enemyID = Object.keys(players).filter(playerID => playerID !== uid)[0];
-  const enemy = players[enemyID];
+  const isPlayer1 = player1 && player1.uid === uid;
+  const myPlayer = isPlayer1 ? player1 : player2;
+  const myPlayerKey = isPlayer1 ? 'player1' : 'player2';
+  const enemy = isPlayer1 ? player2 : player1;
+
+  const {heroes: myHeroes} = myPlayer;
 
   if (!enemy) {
     return <div>waiting for opponent</div>;
@@ -34,7 +37,7 @@ export const CharacterSelect = () => {
       .doc(gameID)
       .update({
         heroes: heroes.filter(hero => hero !== character),
-        [`players.${uid}.heroes`]: [...myHeroes, character],
+        [`${myPlayerKey}.heroes`]: [...myHeroes, character],
       });
   };
 
@@ -52,7 +55,7 @@ export const CharacterSelect = () => {
           characters={enemyHeroes}
           label={enemyName}
           onDrop={selectCharacter}
-          type="ally"
+          type="enemy"
         />
       </SpacedContent>
     </DnDFrame>

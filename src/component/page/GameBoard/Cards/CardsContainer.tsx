@@ -23,14 +23,11 @@ export const Cards = ({updateGame}: {deck: [string]}) => {
     uid: firebase.auth.uid,
   }));
 
-  const {deck, discard, players, pool, banned} = useSelector(
+  const {deck, discard, player1, player2, pool, banned} = useSelector(
     ({firestore: {data}}) => data.games && data.games[gameID]
   );
 
-  const {
-    [uid]: {hand},
-    ...rest
-  } = players;
+  const myPlayer = player1.uid === uid ? 'player1' : 'player2';
 
   const opponentHand = rest && rest.hand;
 
@@ -54,7 +51,7 @@ export const Cards = ({updateGame}: {deck: [string]}) => {
 
       updateGame({
         banned: suit,
-        [`players.${uid}.hand`]: newHand,
+        [`${myPlayer}.hand`]: newHand,
       });
     }
   };
@@ -64,7 +61,7 @@ export const Cards = ({updateGame}: {deck: [string]}) => {
 
     updateGame({
       discard: newDiscard,
-      [`players.${uid}.hand`]: discardedHand,
+      [`${myPlayer}.hand`]: discardedHand,
     });
   };
 
@@ -81,7 +78,7 @@ export const Cards = ({updateGame}: {deck: [string]}) => {
     updateGame({
       discard: newDiscard,
       deck: newDeck,
-      [`players.${uid}.hand`]: newHand,
+      [`${myPlayer}.hand`]: newHand,
     });
   };
 
@@ -95,7 +92,7 @@ export const Cards = ({updateGame}: {deck: [string]}) => {
     updateGame({
       discard: newDiscard,
       deck: newDeck,
-      [`players.${uid}.hand`]: newHand,
+      [`${myPlayer}.hand`]: newHand,
     });
   };
 
@@ -124,7 +121,7 @@ export const Cards = ({updateGame}: {deck: [string]}) => {
     newHand[handIndex] = poolCard;
 
     updateGame({
-      [`players.${uid}.hand`]: newHand,
+      [`${myPlayer}.hand`]: newHand,
       pool: newPool,
     });
   };
