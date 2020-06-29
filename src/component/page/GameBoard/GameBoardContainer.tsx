@@ -3,6 +3,8 @@ import {useSelector} from 'react-redux';
 import {useFirestore} from 'react-redux-firebase';
 import {HexGrid} from 'react-hexgrid';
 
+import {SpacedContent} from 'component/base';
+
 import {Board} from './Board';
 import {Cards} from './Cards';
 import {Objects} from './Objects';
@@ -10,19 +12,16 @@ import {Objects} from './Objects';
 export const GameBoard = () => {
   const fireStore = useFirestore();
 
-  const {gameID, uid} = useSelector(({game, firebase}) => ({
-    gameID: game.activeGame,
-    uid: firebase.auth.uid,
-  }));
-
-  const game = useSelector(
-    ({firestore: {data}}) => data.games && data.games[gameID]
+  const {activePlayer, game, gameID, uid} = useSelector(
+    ({game: {activeGame}, firebase: {auth}, firestore: {data}}) => ({
+      activePlayer: data.games[activeGame].activePlayer,
+      game: data.games[activeGame],
+      gameID: activeGame,
+      uid: auth.uid,
+    })
   );
 
-  if (!game) {
-    return <div>Loading Game...</div>;
-  }
-
+  const {player1, player2} = game;
   const isPlayer1 = player1 && player1.uid === uid;
   const myPlayer = isPlayer1 ? player1 : player2;
 
@@ -41,6 +40,12 @@ export const GameBoard = () => {
 
   return (
     <>
+      <div space={1} horizontal>
+        Turn: {game[activePlayer].name}
+      </div>
+      <button type="button" onClick={endTurn}>
+        End Turn
+      </button>
       <HexGrid width={1000} height={550} viewBox="-65 -50 100 100">
         <Board updateBoard={updateBoard} board={game.board} />
         <Objects objects={game.objects} />

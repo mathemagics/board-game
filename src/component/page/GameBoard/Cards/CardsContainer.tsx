@@ -3,14 +3,7 @@ import {useSelector} from 'react-redux';
 
 import {drawCard, discardCard, shuffle} from 'game/card';
 
-import {
-  Card,
-  CardGroup,
-  DnDFrame,
-  Label,
-  SpacedContent,
-  Spinner,
-} from 'component/base';
+import {Card, CardGroup, DnDFrame, Label, SpacedContent} from 'component/base';
 
 import {BanPile} from '../BanPile';
 import {DiscardPile} from '../DiscardPile';
@@ -27,10 +20,14 @@ export const Cards = ({updateGame}: {deck: [string]}) => {
     ({firestore: {data}}) => data.games && data.games[gameID]
   );
 
-  const myPlayer = player1.uid === uid ? 'player1' : 'player2';
+  const isPlayer1 = player1.uid === uid;
+  const myPlayer = isPlayer1 ? player1 : player2;
+  const myPlayerKey = isPlayer1 ? 'player1' : 'player2';
+  const enemy = isPlayer1 ? player2 : player1;
+  const {hand} = myPlayer;
+  const opponentHand = enemy.hand;
 
-  const opponentHand = rest && rest.hand;
-
+  // TODO move the card code into game/card move actions into actions file
   const handleBan = ({suit, from}) => {
     // TODO: Dedupe
     if (from === 'pool') {
@@ -51,7 +48,7 @@ export const Cards = ({updateGame}: {deck: [string]}) => {
 
       updateGame({
         banned: suit,
-        [`${myPlayer}.hand`]: newHand,
+        [`${myPlayerKey}.hand`]: newHand,
       });
     }
   };
@@ -61,7 +58,7 @@ export const Cards = ({updateGame}: {deck: [string]}) => {
 
     updateGame({
       discard: newDiscard,
-      [`${myPlayer}.hand`]: discardedHand,
+      [`${myPlayerKey}.hand`]: discardedHand,
     });
   };
 
@@ -78,7 +75,7 @@ export const Cards = ({updateGame}: {deck: [string]}) => {
     updateGame({
       discard: newDiscard,
       deck: newDeck,
-      [`${myPlayer}.hand`]: newHand,
+      [`${myPlayerKey}.hand`]: newHand,
     });
   };
 
@@ -92,7 +89,7 @@ export const Cards = ({updateGame}: {deck: [string]}) => {
     updateGame({
       discard: newDiscard,
       deck: newDeck,
-      [`${myPlayer}.hand`]: newHand,
+      [`${myPlayerKey}.hand`]: newHand,
     });
   };
 
@@ -121,7 +118,7 @@ export const Cards = ({updateGame}: {deck: [string]}) => {
     newHand[handIndex] = poolCard;
 
     updateGame({
-      [`${myPlayer}.hand`]: newHand,
+      [`${myPlayerKey}.hand`]: newHand,
       pool: newPool,
     });
   };
@@ -132,14 +129,14 @@ export const Cards = ({updateGame}: {deck: [string]}) => {
     }
     const newHand = [...hand, discard[discard.length - 1]];
     const newDiscard = discard.slice(0, discard.length - 1);
-    updateGame({[`players.${uid}.hand`]: newHand, discard: newDiscard});
+    updateGame({[`${myPlayerKey}.hand`]: newHand, discard: newDiscard});
   };
 
   return (
     <DnDFrame style={{width: '100%', height: 400}}>
       <SpacedContent header={2}>
         <SpacedContent horizontal space={3}>
-          <SpacedContent horizontal space={1}>
+          <SpacedContent horizontal space={1} center>
             <Label>Deck:</Label>
             <Card onDoubleClick={handleDraw}>{deck.length}</Card>
           </SpacedContent>
@@ -154,9 +151,9 @@ export const Cards = ({updateGame}: {deck: [string]}) => {
             onCardDoubleClick={handleTakeDiscard}
           />
           <BanPile card={banned} onDrop={handleBan} />
-          <SpacedContent horizontal space={1}>
+          <SpacedContent horizontal space={1} center>
             <Label>Enemy:</Label>
-            <Card>{opponentHand ? opponentHand.length : <Spinner />}</Card>
+            <Card>{opponentHand.length}</Card>
           </SpacedContent>
         </SpacedContent>
         <SpacedContent horizontal space={2}>

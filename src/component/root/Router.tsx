@@ -2,7 +2,6 @@ import * as React from 'react';
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import {useSelector} from 'react-redux';
 import {isLoaded, isEmpty} from 'react-redux-firebase';
-import firebase from 'firebase/app';
 
 import {Auth} from 'component/page/Auth';
 import {Home} from 'component/page/Home';
@@ -11,13 +10,6 @@ import {Game} from 'component/page/Game';
 
 const PrivateRoute = ({children, ...rest}) => {
   const auth = useSelector(state => state.firebase.auth);
-
-  const login = React.useCallback(() => {
-    if (isLoaded(auth) && isEmpty(auth)) {
-      firebase.login({provider: 'google', type: 'popup'});
-    }
-  });
-
   return (
     <Route
       {...rest}
