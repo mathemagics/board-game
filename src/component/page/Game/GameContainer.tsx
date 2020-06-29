@@ -1,11 +1,9 @@
 import * as React from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import {useFirestoreConnect, useFirestore} from 'react-redux-firebase';
-import {useParams} from 'react-router-dom';
+import {useFirestoreConnect} from 'react-redux-firebase';
+import {MemoryRouter, Route, useParams} from 'react-router-dom';
 
-import {createPlayer} from 'game/player';
-import {GAME_PHASES} from 'game/game';
-
+import {PreGame} from '../PreGame';
 import {CharacterSelect} from '../CharacterSelect';
 import {GameBoard} from '../GameBoard';
 
@@ -14,7 +12,6 @@ import {setActiveGame} from './GameDuck';
 export const Game = () => {
   const {gameID} = useParams();
   const dispatch = useDispatch();
-  const firestore = useFirestore();
 
   const setGameID = React.useCallback(
     aGameID => dispatch(setActiveGame(aGameID)),
@@ -27,10 +24,8 @@ export const Game = () => {
     }
   }, []);
 
-  const {currentGameID, name, uid} = useSelector(({game, firebase}) => ({
+  const {currentGameID} = useSelector(({game}) => ({
     currentGameID: game.activeGame,
-    uid: firebase.auth.uid,
-    name: firebase.auth.displayName,
   }));
 
   useFirestoreConnect([
@@ -44,28 +39,15 @@ export const Game = () => {
     return data.games && data.games[currentGameID];
   });
 
-  // TODO reconsider how we store players also Enum for `player1`, 'player2'
-  const myPlayer =
-    game && game.player1 && game.player1.uid === uid ? 'player1' : 'player2';
-
-  React.useEffect(() => {
-    if (game && !game[myPlayer] && !(game.player1 && game.player2)) {
-      const newPlayer = createPlayer({userID: uid, name});
-
-      firestore
-        .collection('games')
-        .doc(gameID)
-        .update({[myPlayer]: newPlayer});
-    }
-  }, [game]);
-
-  if (!game || !game[myPlayer]) {
+  if (!game) {
     return <div>Loading Game...</div>;
   }
 
-  return game.phase === GAME_PHASES.character ? (
-    <CharacterSelect />
-  ) : (
-    <GameBoard />
+  return (
+    <MemoryRouter>
+      <Route exact path="/" component={PreGame} />
+      <Route path="/character" component={CharacterSelect} />
+      <Route path="/board" component={GameBoard} />
+    </MemoryRouter>
   );
 };

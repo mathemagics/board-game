@@ -9,35 +9,27 @@ import {CharacterList} from './CharacterList';
 export const CharacterSelect = () => {
   const fireStore = useFirestore();
 
-  const {gameID, myName, uid} = useSelector(({game, firebase: {auth}}) => ({
-    gameID: game.activeGame,
-    uid: auth.uid,
-    myName: auth.displayName,
-  }));
-
-  const {player1, player2, heroes} = useSelector(
-    ({firestore: {data}}) => data.games && data.games[gameID]
+  const {game, gameID, uid} = useSelector(
+    ({game: {activeGame}, firebase: {auth}, firestore: {data}}) => ({
+      game: data.games[activeGame],
+      gameID: activeGame,
+      uid: auth.uid,
+    })
   );
 
-  const isPlayer1 = player1 && player1.uid === uid;
-  const myPlayer = isPlayer1 ? player1 : player2;
-  const myPlayerKey = isPlayer1 ? 'player1' : 'player2';
-  const enemy = isPlayer1 ? player2 : player1;
-
-  const {heroes: myHeroes} = myPlayer;
-
-  if (!enemy) {
-    return <div>waiting for opponent</div>;
-  }
-  const {heroes: enemyHeroes, name: enemyName} = enemy;
+  const {player1, player2, heroes} = game;
+  const isPlayer1 = player1.uid === uid;
 
   const selectCharacter = character => {
+    const playerKey = isPlayer1 ? 'player1' : 'player2';
+    const myHeroes = game[playerKey].heroes;
+
     fireStore
       .collection('games')
       .doc(gameID)
       .update({
         heroes: heroes.filter(hero => hero !== character),
-        [`${myPlayerKey}.heroes`]: [...myHeroes, character],
+        [`${playerKey}.heroes`]: [...myHeroes, character],
       });
   };
 
@@ -45,16 +37,16 @@ export const CharacterSelect = () => {
     <DnDFrame style={{width: '100%', height: 600}}>
       <SpacedContent horizontal space={8}>
         <CharacterList
-          label={myName}
-          characters={myHeroes}
-          onDrop={selectCharacter}
+          label={player1.name}
+          characters={player1.heroes}
+          onDrop={player1.uid === uid ? selectCharacter : null}
           type="ally"
         />
         <CharacterList characters={heroes} label="Heroes" type="heroes" />
         <CharacterList
-          characters={enemyHeroes}
-          label={enemyName}
-          onDrop={selectCharacter}
+          characters={player2.heroes}
+          label={player2.name}
+          onDrop={player2.uid === uid ? selectCharacter : null}
           type="enemy"
         />
       </SpacedContent>

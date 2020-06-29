@@ -4,24 +4,21 @@ import {Label, SpacedContent} from 'component/base';
 
 import {CharacterCard, CHARACTER_TYPE} from '../CharacterCard';
 
+// TODO dont' add drop handlers if no onDrop
 export const CharacterList = ({characters, label, onDrop, type}) => {
-  const [{isOver, canDrop}, drop] = useDrop({
+  const [_, drop] = useDrop({
     accept: CHARACTER_TYPE,
-    canDrop: ({from}) => {
-      // TODO tokenize
-      const allowedFrom = ['heroes'];
-      return type !== 'heroes' && allowedFrom.includes(from);
+    canDrop: ({from}) => from === 'heroes',
+    drop: ({character}) => {
+      if (onDrop) {
+        onDrop(character);
+      }
     },
-    drop: ({character}) => onDrop(character),
-    collect: monitor => ({
-      isOver: !!monitor.isOver(),
-      canDrop: !!monitor.canDrop(),
-    }),
   });
   return (
     <SpacedContent ref={drop}>
       <Label>{label}</Label>
-      <SpacedContent ref={drop}>
+      <SpacedContent ref={drop} header={2}>
         {characters.map(character => (
           <CharacterCard key={character} character={character} type={type} />
         ))}

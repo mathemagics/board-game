@@ -4,8 +4,6 @@ import {useSelector} from 'react-redux';
 import {isLoaded, isEmpty} from 'react-redux-firebase';
 import firebase from 'firebase/app';
 
-import {Button} from 'component/base';
-
 import {Auth} from 'component/page/Auth';
 import {Home} from 'component/page/Home';
 import {NewGame} from 'component/page/NewGame';
@@ -24,13 +22,7 @@ const PrivateRoute = ({children, ...rest}) => {
     <Route
       {...rest}
       render={() =>
-        isLoaded(auth) && !isEmpty(auth) ? (
-          children
-        ) : (
-          <Button type="button" onClick={login}>
-            Log In...
-          </Button>
-        )
+        isLoaded(auth) && !isEmpty(auth) ? children : 'Logging In...'
       }
     />
   );
