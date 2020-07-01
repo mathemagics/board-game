@@ -117,6 +117,7 @@ export const initializeBoard = () => {
     const player1Heroes = player1.heroes;
     const player2Heroes = player2.heroes;
 
+    // TODO: need a much better implementation of this
     const newBoard = [...board];
     newBoard[51] = {...newBoard[51], text: player1Heroes[0]};
     newBoard[61] = {...newBoard[61], text: player1Heroes[1]};
