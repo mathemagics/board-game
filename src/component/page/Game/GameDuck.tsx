@@ -2,6 +2,7 @@ import {createSelector} from 'reselect';
 
 import {createPlayer} from 'game/player';
 import {createGame} from 'game/game';
+import {removeCard, drawCard, shuffle} from 'game/card';
 
 // Actions
 const SET_ACTIVE_GAME = 'SET_ACTIVE_GAME';
@@ -29,6 +30,7 @@ const PLAYER_TWO = 'player2';
 // Selectors
 
 // TODO: rename activeGme activeGameID
+// TODO: Handle storing activeGameID and activeGame in some normal way
 export const selectActiveGameID = state => state.game.activeGame;
 
 export const selectActiveGame = state => {
@@ -57,12 +59,15 @@ export const selectActivePlayer = createSelector(
   game => game.activePlayer
 );
 
-export const selectMyPlayer = createSelector(
+export const selectMyPlayerKey = createSelector(
   [selectActiveGame, selectPlayer1, selectPlayer2, selectMyID],
-  (game, player1, player2, myID) => {
-    const myPlayer = myID === player1.uid ? PLAYER_ONE : PLAYER_TWO;
-    return game[myPlayer];
-  }
+  (game, player1, player2, myID) =>
+    myID === player1.uid ? PLAYER_ONE : PLAYER_TWO
+);
+
+export const selectMyPlayer = createSelector(
+  [selectActiveGame, selectMyPlayerKey],
+  (game, myPlayerKey) => game[myPlayerKey]
 );
 
 export const selectEnemyPlayer = createSelector(
@@ -132,7 +137,6 @@ export const initializeBoard = () => {
 export const addPlayer = () => {
   return (dispatch, getState) => {
     const state = getState();
-
     const uid = selectMyID(state);
     const displayName = selectMyName(state);
     const player1 = selectPlayer1(state);
@@ -147,4 +151,188 @@ export const addPlayer = () => {
 
     return dispatch(updateGame({[playerKey]: newPlayer}));
   };
+};
+
+// TODO maybe dedupe with banFromHand
+export const banFromPool = card => (dispatch, getState) => {
+  const game = selectActiveGame(getState());
+  const {banned, deck, discard, pool} = game;
+  const remainingPool = removeCard(card, pool);
+
+  if (banned) {
+    dispatch(
+      updateGame({
+        banned: card,
+        pool: [...remainingPool, banned],
+      })
+    );
+  } else {
+    const isDeckEmpty = deck.length === 0;
+    const drawDeck = isDeckEmpty ? shuffle([...discard]) : deck;
+    const [replacementCard, remainingDeck] = drawCard(drawDeck);
+
+    dispatch(
+      updateGame({
+        banned: card,
+        pool: [...remainingPool, replacementCard],
+        deck: remainingDeck,
+        discard: isDeckEmpty ? [] : discard,
+      })
+    );
+  }
+};
+
+export const banFromHand = card => (dispatch, getState) => {
+  const state = getState();
+  const {banned, deck, discard} = selectActiveGame(state);
+  const {hand} = selectMyPlayer(state);
+  // TODO put the playerKey on the player
+  const myPlayerKey = selectMyPlayerKey(state);
+  const remainingHand = removeCard(card, hand);
+
+  if (banned) {
+    dispatch(
+      updateGame({
+        banned: card,
+        [`${myPlayerKey}.hand`]: [...remainingHand, banned],
+      })
+    );
+  } else {
+    const isDeckEmpty = deck.length === 0;
+    const drawDeck = isDeckEmpty ? shuffle([...discard]) : deck;
+    const [replacementCard, remainingDeck] = drawCard(drawDeck);
+
+    dispatch(
+      updateGame({
+        banned: card,
+        [`${myPlayerKey}.hand`]: [...remainingHand, replacementCard],
+        deck: remainingDeck,
+        discard: isDeckEmpty ? [] : discard,
+      })
+    );
+  }
+};
+
+export const cycleFromHand = card => (dispatch, getState) => {
+  const state = getState();
+  const {deck, discard} = selectActiveGame(state);
+  const {hand} = selectMyPlayer(state);
+  const myPlayerKey = selectMyPlayerKey(state);
+
+  const isDeckEmpty = deck.length === 0;
+  const drawDeck = isDeckEmpty ? shuffle([...discard]) : deck;
+  const newDiscard = isDeckEmpty ? [card] : [...discard, card];
+  const [newCard, newDeck] = drawCard(drawDeck);
+
+  const remainingHand = removeCard(card, hand);
+  const newHand = [...remainingHand, newCard];
+
+  dispatch(
+    updateGame({
+      discard: newDiscard,
+      deck: newDeck,
+      [`${myPlayerKey}.hand`]: newHand,
+    })
+  );
+};
+
+export const cycleFromPool = card => (dispatch, getState) => {
+  const {pool, deck, discard} = selectActiveGame(getState());
+
+  const isDeckEmpty = deck.length === 0;
+  const activeDeck = isDeckEmpty ? shuffle([...discard]) : deck;
+  const newDiscard = isDeckEmpty ? [card] : [...discard, card];
+
+  const index = pool.indexOf(card);
+  const [newCard, newDeck] = drawCard(activeDeck);
+  const newPool = [...pool];
+  newPool[index] = newCard;
+
+  dispatch(
+    updateGame({
+      deck: newDeck,
+      discard: newDiscard,
+      pool: newPool,
+    })
+  );
+};
+
+export const discardFromHand = card => (dispatch, getState) => {
+  const state = getState();
+  const {discard} = selectActiveGame(state);
+  const {hand} = selectMyPlayer(state);
+  const myPlayerKey = selectMyPlayerKey(state);
+  const [discardedHand, newDiscard] = discardCard({card, hand, discard});
+
+  dispatch(
+    updateGame({
+      discard: newDiscard,
+      [`${myPlayerKey}.hand`]: discardedHand,
+    })
+  );
+};
+
+export const drawFromDeck = () => (dispatch, getState) => {
+  const state = getState();
+  const {deck, discard} = selectActiveGame(state);
+  const {hand} = selectMyPlayer(state);
+  const myPlayerKey = selectMyPlayerKey(state);
+
+  // TODO better handle empty deck across action
+  const isDeckEmpty = deck.length === 0;
+  const drawDeck = isDeckEmpty ? shuffle([...discard]) : deck;
+
+  const [card, newDeck] = drawCard(drawDeck);
+  const newHand = [...hand, card];
+
+  dispatch(
+    updateGame({
+      discard: isDeckEmpty ? [] : discard,
+      deck: newDeck,
+      [`${myPlayerKey}.hand`]: newHand,
+    })
+  );
+};
+
+export const drawFromDiscard = () => (dispatch, getState) => {
+  const state = getState();
+  const myPlayerKey = selectMyPlayerKey(state);
+  const myPlayer = selectMyPlayer(state);
+  const {discard} = selectActiveGame(state);
+
+  if (discard.length < 1) {
+    return;
+  }
+
+  const newHand = [...myPlayer.hand, discard[discard.length - 1]];
+  const newDiscard = discard.slice(0, discard.length - 1);
+
+  return dispatch(
+    updateGame({[`${myPlayerKey}.hand`]: newHand, discard: newDiscard})
+  );
+};
+
+export const swapHandAndPool = ({handCard, poolCard}) => (
+  dispatch,
+  getState
+) => {
+  const state = getState();
+  const {pool} = selectActiveGame(state);
+  const {hand} = selectMyPlayer(state);
+  const myPlayerKey = selectMyPlayerKey(state);
+
+  const poolIndex = pool.indexOf(poolCard);
+  const newPool = [...pool];
+  newPool[poolIndex] = handCard;
+
+  const handIndex = hand.indexOf(handCard);
+  const newHand = [...hand];
+  newHand[handIndex] = poolCard;
+
+  dispatch(
+    updateGame({
+      [`${myPlayerKey}.hand`]: newHand,
+      pool: newPool,
+    })
+  );
 };

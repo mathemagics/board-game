@@ -53,3 +53,6 @@ export const discardCard = ({card, hand, discard}) => {
   const newDiscard = [...discard, card];
   return [newHand, newDiscard];
 };
+
+export const removeCard = (card, pile) =>
+  pile.filter((_card, index) => pile.indexOf(card) !== index);

@@ -13,6 +13,7 @@ export const Game = () => {
   const {gameID} = useParams();
   const dispatch = useDispatch();
 
+  // TODO everythign with aciveGameID
   const setGameID = React.useCallback(
     aGameID => dispatch(setActiveGame(aGameID)),
     [dispatch]
