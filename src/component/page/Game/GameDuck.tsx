@@ -1,3 +1,8 @@
+import {createSelector} from 'reselect';
+
+import {createPlayer} from 'game/player';
+import {createGame} from 'game/game';
+
 // Actions
 const SET_ACTIVE_GAME = 'SET_ACTIVE_GAME';
 
@@ -16,9 +21,106 @@ export const gameReducer = (state = {}, action = {}) => {
   }
 };
 
-// side effects, only as applicable
-// e.g. thunks, epics, etc
-export function getWidget() {
-  return dispatch =>
-    get('/widget').then(widget => dispatch(updateWidget(widget)));
-}
+// Constants
+// TODO: localize these enums
+const PLAYER_ONE = 'player1';
+const PLAYER_TWO = 'player2';
+
+// Selectors
+
+// TODO: rename activeGme activeGameID
+export const selectActiveGameID = state => state.game.activeGame;
+
+export const selectActiveGame = state => {
+  const {
+    game: {activeGame},
+    firestore: {data},
+  } = state;
+  return activeGame && data.games && data.games[activeGame];
+};
+
+export const selectPlayer1 = createSelector(
+  selectActiveGame,
+  game => game.player1
+);
+
+export const selectPlayer2 = createSelector(
+  selectActiveGame,
+  game => game.player2
+);
+
+export const selectMyID = state => state.firebase.auth.uid;
+export const selectMyName = state => state.firebase.auth.displayName;
+
+export const selectActivePlayer = createSelector(
+  selectActiveGame,
+  game => game.activePlayer
+);
+
+export const selectMyPlayer = createSelector(
+  [selectActiveGame, selectPlayer1, selectPlayer2, selectMyID],
+  (game, player1, player2, myID) => {
+    const myPlayer = myID === player1.uid ? PLAYER_ONE : PLAYER_TWO;
+    return game[myPlayer];
+  }
+);
+
+export const selectEnemyPlayer = createSelector(
+  [selectActiveGame, selectPlayer1, selectPlayer2, selectMyID],
+  (game, player1, player2, myID) => {
+    const enemyPlayerKey = myID === player1.uid ? PLAYER_TWO : PLAYER_ONE;
+    return game[enemyPlayerKey];
+  }
+);
+
+// SideEffects
+export const createNewGame = () => {
+  return (dispatch, getState, getFirebase) => {
+    const {
+      firebase: {
+        auth: {uid, displayName},
+      },
+    } = getState();
+
+    const newGame = createGame({userID: uid, name: displayName});
+
+    return getFirebase()
+      .firestore()
+      .collection('games')
+      .add(newGame)
+      .then(game => {
+        dispatch(setActiveGame(game.id));
+      });
+  };
+};
+
+export const updateGame = args => {
+  return (dispatch, getState, getFirebase) => {
+    const {activeGame} = getState().game;
+    return getFirebase()
+      .firestore()
+      .collection('games')
+      .doc(activeGame)
+      .update(args);
+  };
+};
+
+export const addPlayer = () => {
+  return (dispatch, getState) => {
+    const state = getState();
+
+    const uid = selectMyID(state);
+    const displayName = selectMyName(state);
+    const player1 = selectPlayer1(state);
+    const player2 = selectPlayer2(state);
+
+    if ((player1 && player1.uid === uid) || (player2 && player2.uid === uid)) {
+      return;
+    }
+
+    const playerKey = player1 ? PLAYER_TWO : PLAYER_ONE;
+    const newPlayer = createPlayer({userID: uid, name: displayName});
+
+    return dispatch(updateGame({[playerKey]: newPlayer}));
+  };
+};

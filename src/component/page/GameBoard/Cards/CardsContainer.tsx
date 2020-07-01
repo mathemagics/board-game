@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 import {drawCard, discardCard, shuffle} from 'game/card';
 
@@ -9,21 +9,28 @@ import {BanPile} from '../BanPile';
 import {DiscardPile} from '../DiscardPile';
 import {PoolPile} from '../PoolPile';
 
-// TODO don't get updateGame from props
-export const Cards = ({updateGame}: {deck: [string]}) => {
-  const {gameID, uid} = useSelector(({game, firebase}) => ({
-    gameID: game.activeGame,
-    uid: firebase.auth.uid,
-  }));
+import {
+  selectActiveGame,
+  selectEnemyPlayer,
+  selectMyID,
+  selectMyPlayer,
+} from '../../Game/GameDuck';
 
-  const {deck, discard, player1, player2, pool, banned} = useSelector(
-    ({firestore: {data}}) => data.games && data.games[gameID]
-  );
+const PLAYER_ONE = 'player1';
+const PLAYER_TWO = 'player2';
+
+export const Cards = () => {
+  const dispatch = useDispatch();
+
+  const uid = useSelector(selectMyID);
+
+  const game = useSelector(selectActiveGame);
+  const {deck, discard, player1, pool, banned} = game;
 
   const isPlayer1 = player1.uid === uid;
-  const myPlayer = isPlayer1 ? player1 : player2;
-  const myPlayerKey = isPlayer1 ? 'player1' : 'player2';
-  const enemy = isPlayer1 ? player2 : player1;
+  const myPlayer = useSelector(selectMyPlayer);
+  const myPlayerKey = isPlayer1 ? PLAYER_ONE : PLAYER_TWO;
+  const enemy = useSelector(selectEnemyPlayer);
   const {hand} = myPlayer;
   const opponentHand = enemy.hand;
 
@@ -36,30 +43,36 @@ export const Cards = ({updateGame}: {deck: [string]}) => {
       });
       const newPool = banned ? [...remainingPool, banned] : remainingPool;
 
-      updateGame({
-        banned: suit,
-        pool: newPool,
-      });
+      dispatch(
+        updateGame({
+          banned: suit,
+          pool: newPool,
+        })
+      );
     } else if (from === 'hand') {
       const remainingHand = hand.filter((_item, index) => {
         return hand.indexOf(suit) !== index;
       });
       const newHand = banned ? [...remainingHand, banned] : remainingHand;
 
-      updateGame({
-        banned: suit,
-        [`${myPlayerKey}.hand`]: newHand,
-      });
+      dispatch(
+        updateGame({
+          banned: suit,
+          [`${myPlayerKey}.hand`]: newHand,
+        })
+      );
     }
   };
 
   const handleDiscard = card => {
     const [discardedHand, newDiscard] = discardCard({card, hand, discard});
 
-    updateGame({
-      discard: newDiscard,
-      [`${myPlayerKey}.hand`]: discardedHand,
-    });
+    dispatch(
+      updateGame({
+        discard: newDiscard,
+        [`${myPlayerKey}.hand`]: discardedHand,
+      })
+    );
   };
 
   const handleHandClick = card => {
@@ -72,11 +85,13 @@ export const Cards = ({updateGame}: {deck: [string]}) => {
     });
     const newHand = [...remainingHand, newCard];
 
-    updateGame({
-      discard: newDiscard,
-      deck: newDeck,
-      [`${myPlayerKey}.hand`]: newHand,
-    });
+    dispatch(
+      updateGame({
+        discard: newDiscard,
+        deck: newDeck,
+        [`${myPlayerKey}.hand`]: newHand,
+      })
+    );
   };
 
   const handleDraw = () => {
@@ -86,11 +101,13 @@ export const Cards = ({updateGame}: {deck: [string]}) => {
     const newHand = [...hand, card];
     const newDiscard = isDeckEmpty ? [] : discard;
 
-    updateGame({
-      discard: newDiscard,
-      deck: newDeck,
-      [`${myPlayerKey}.hand`]: newHand,
-    });
+    dispatch(
+      updateGame({
+        discard: newDiscard,
+        deck: newDeck,
+        [`${myPlayerKey}.hand`]: newHand,
+      })
+    );
   };
 
   const handlePoolDraw = poolCard => {
@@ -101,11 +118,13 @@ export const Cards = ({updateGame}: {deck: [string]}) => {
     const newPool = [...pool];
     newPool[index] = card;
 
-    updateGame({
-      deck: newDeck,
-      discard: newDiscard,
-      pool: newPool,
-    });
+    dispatch(
+      updateGame({
+        deck: newDeck,
+        discard: newDiscard,
+        pool: newPool,
+      })
+    );
   };
 
   const handlePoolDrop = ({suit}, poolCard) => {
@@ -117,23 +136,28 @@ export const Cards = ({updateGame}: {deck: [string]}) => {
     const newHand = [...hand];
     newHand[handIndex] = poolCard;
 
-    updateGame({
-      [`${myPlayerKey}.hand`]: newHand,
-      pool: newPool,
-    });
+    dispatch(
+      updateGame({
+        [`${myPlayerKey}.hand`]: newHand,
+        pool: newPool,
+      })
+    );
   };
 
   const handleTakeDiscard = () => {
     if (discard.length < 1) {
       return;
     }
+
     const newHand = [...hand, discard[discard.length - 1]];
     const newDiscard = discard.slice(0, discard.length - 1);
-    updateGame({[`${myPlayerKey}.hand`]: newHand, discard: newDiscard});
+    dispatch(
+      updateGame({[`${myPlayerKey}.hand`]: newHand, discard: newDiscard})
+    );
   };
 
   return (
-    <DnDFrame style={{width: '100%', height: 400}}>
+    <DnDFrame style={{width: '100%', height: 120}}>
       <SpacedContent header={2}>
         <SpacedContent horizontal space={3}>
           <SpacedContent horizontal space={1} center>

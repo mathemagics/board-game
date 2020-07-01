@@ -7,7 +7,7 @@ import {PreGame} from '../PreGame';
 import {CharacterSelect} from '../CharacterSelect';
 import {GameBoard} from '../GameBoard';
 
-import {setActiveGame} from './GameDuck';
+import {setActiveGame, selectActiveGameID, selectActiveGame} from './GameDuck';
 
 export const Game = () => {
   const {gameID} = useParams();
@@ -24,30 +24,24 @@ export const Game = () => {
     }
   }, []);
 
-  const {currentGameID} = useSelector(({game}) => ({
-    currentGameID: game.activeGame,
-  }));
+  const activeGameId = useSelector(selectActiveGameID);
 
   useFirestoreConnect([
     {
       collection: 'games',
-      doc: currentGameID,
+      doc: activeGameId,
     },
   ]);
 
-  const game = useSelector(({firestore: {data}}) => {
-    return data.games && data.games[currentGameID];
-  });
+  const game = useSelector(selectActiveGame);
 
-  if (!game) {
-    return <div>Loading Game...</div>;
-  }
-
-  return (
+  return game ? (
     <MemoryRouter>
       <Route exact path="/" component={PreGame} />
       <Route path="/character" component={CharacterSelect} />
       <Route path="/board" component={GameBoard} />
     </MemoryRouter>
+  ) : (
+    <div>Loading Game...</div>
   );
 };
