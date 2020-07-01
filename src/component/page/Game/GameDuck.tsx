@@ -105,6 +105,29 @@ export const updateGame = args => {
   };
 };
 
+export const initializeBoard = () => {
+  return (dispatch, getState) => {
+    const {
+      game: {activeGame},
+      firestore: {data},
+    } = getState();
+
+    const {player1, player2, board} = data.games[activeGame];
+
+    const player1Heroes = player1.heroes;
+    const player2Heroes = player2.heroes;
+
+    const newBoard = [...board];
+    newBoard[51] = {...newBoard[51], text: player1Heroes[0]};
+    newBoard[61] = {...newBoard[61], text: player1Heroes[1]};
+    newBoard[70] = {...newBoard[70], text: player1Heroes[2]};
+    newBoard[12] = {...newBoard[12], text: player2Heroes[0]};
+    newBoard[20] = {...newBoard[20], text: player2Heroes[1]};
+    newBoard[29] = {...newBoard[29], text: player2Heroes[2]};
+    return dispatch(updateGame({board: newBoard}));
+  };
+};
+
 export const addPlayer = () => {
   return (dispatch, getState) => {
     const state = getState();
