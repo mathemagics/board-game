@@ -8,6 +8,12 @@ import {DiscardPile} from '../DiscardPile';
 import {PoolPile} from '../PoolPile';
 
 import {
+  selectActiveGame,
+  selectEnemyPlayer,
+  selectMyPlayer,
+} from '../../Game/GameDuck';
+
+import {
   banFromHand,
   banFromPool,
   cycleFromHand,
@@ -15,11 +21,8 @@ import {
   discardFromHand,
   drawFromDeck,
   drawFromDiscard,
-  selectActiveGame,
-  selectEnemyPlayer,
-  selectMyPlayer,
   swapHandAndPool,
-} from '../../Game/GameDuck';
+} from '../../Game/CardDuck';
 
 export const Cards = () => {
   const dispatch = useDispatch();

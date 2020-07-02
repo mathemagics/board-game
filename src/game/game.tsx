@@ -31,7 +31,7 @@ export const createGame = ({userID, name}) => {
     heroes,
     objects,
     phase: GAME_PHASES.character,
-    [playerKey]: player,
+    [playerKey]: {...player, key: playerKey},
     pool,
   };
 };
