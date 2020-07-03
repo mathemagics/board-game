@@ -3,7 +3,7 @@ import {Text, HexUtils} from 'react-hexgrid';
 
 import {Map, Hex} from './Board.styles';
 
-export const Board = ({board, updateBoard}) => {
+export const Board = ({board, updateBoard, onHeroClick}) => {
   const [next, setNext] = React.useState();
 
   const onDrop = React.useCallback(
@@ -113,7 +113,7 @@ export const Board = ({board, updateBoard}) => {
             onDragEnd={(e, h, s) => onDragEnd(e, h, s)}
             onDrop={(e, h, t) => onDrop(e, h, t)}
             onDragOver={(e, h) => onDragOver(e, h)}
-            onClick={(e, s, t) => onDoubleClick(e, s, t)}
+            onClick={() => onHeroClick(hex.text)}
           >
             <Text>{hex.text}</Text>
           </Hex>

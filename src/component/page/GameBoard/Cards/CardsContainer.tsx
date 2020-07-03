@@ -70,7 +70,7 @@ export const Cards = () => {
   };
 
   return (
-    <DnDFrame style={{width: '100%', height: 120}}>
+    <DnDFrame style={{width: 675, height: 120}}>
       <SpacedContent header={2}>
         <SpacedContent horizontal space={3}>
           <SpacedContent horizontal space={1} center>

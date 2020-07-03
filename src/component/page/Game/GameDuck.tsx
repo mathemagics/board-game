@@ -3,12 +3,19 @@ import {createSelector} from 'reselect';
 import {createPlayer} from 'game/player';
 import {createGame} from 'game/game';
 
+import {heroInfo} from 'game/hero';
+
 // Actions
 const SET_ACTIVE_GAME = 'SET_ACTIVE_GAME';
+const SET_INSPECT_HERO = 'SET_INSPECT_HERO';
 
 // Action Creators
 export const setActiveGame = gameID => {
   return {type: SET_ACTIVE_GAME, payload: gameID};
+};
+
+export const setInspectHero = hero => {
+  return {type: SET_INSPECT_HERO, payload: hero};
 };
 
 // Reducer
@@ -16,6 +23,8 @@ export const gameReducer = (state = {}, action = {}) => {
   switch (action.type) {
     case SET_ACTIVE_GAME:
       return {...state, activeGame: action.payload};
+    case SET_INSPECT_HERO:
+      return {...state, inspectHero: action.payload};
     default:
       return state;
   }
@@ -38,6 +47,10 @@ export const selectActiveGame = state => {
     firestore: {data},
   } = state;
   return activeGame && data.games && data.games[activeGame];
+};
+
+export const selectInspectHero = state => {
+  return heroInfo[state.game.inspectHero];
 };
 
 export const selectPlayer1 = createSelector(
@@ -65,8 +78,16 @@ export const selectMyPlayerKey = createSelector(
 );
 
 export const selectMyPlayer = createSelector(
-  [selectActiveGame, selectMyPlayerKey],
-  (game, myPlayerKey) => game[myPlayerKey]
+  [selectActiveGame, selectPlayer1, selectPlayer2, selectMyID],
+  (game, player1, player2, myID) => {
+    const key =
+      player1.uid === myID
+        ? PLAYER_ONE
+        : player2.uid === myID
+        ? PLAYER_TWO
+        : null;
+    return game[key];
+  }
 );
 
 export const selectEnemyPlayer = createSelector(
@@ -154,4 +175,22 @@ export const addPlayer = () => {
       })
     );
   };
+};
+
+export const chooseHero = chosenHero => (dispatch, getState) => {
+  const state = getState();
+  const {heroes, activePlayer} = selectActiveGame(state);
+  const {heroes: myHeroes, key} = selectMyPlayer(state);
+
+  if (activePlayer === key) {
+    const nextPlayer = activePlayer === 'player1' ? 'player2' : 'player1';
+
+    dispatch(
+      updateGame({
+        heroes: heroes.filter(hero => hero !== chosenHero),
+        [`${key}.heroes`]: [...myHeroes, chosenHero],
+        activePlayer: nextPlayer,
+      })
+    );
+  }
 };

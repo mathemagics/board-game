@@ -5,44 +5,48 @@ import {HexGrid} from 'react-hexgrid';
 import {Board} from './Board';
 import {Cards} from './Cards';
 import {Objects} from './Objects';
+import {HeroInfo} from './HeroInfo';
 
 import {
   initializeBoard,
+  setInspectHero,
+  selectInspectHero,
   selectActiveGame,
-  selectActivePlayer,
   updateGame,
 } from '../Game/GameDuck';
 
 export const GameBoard = () => {
   const dispatch = useDispatch();
   const game = useSelector(selectActiveGame);
-  const activePlayer = useSelector(selectActivePlayer);
+  const inspectHero = useSelector(selectInspectHero);
 
   const updateBoard = board => {
     dispatch(updateGame({board}));
   };
 
-  const endTurn = () => {
-    // TODO figure out all this logic
-    const nextPlayer = activePlayer === 'player1' ? 'player2' : 'player1';
-    dispatch(updateGame({activePlayer: nextPlayer}));
+  const handleHeroClick = hero => {
+    dispatch(setInspectHero(hero));
   };
 
   React.useEffect(() => {
+    // TODO add gameState for post-initializationt o not accidentally do this twice
     dispatch(initializeBoard());
   }, []);
 
   return (
     <>
-      <div>Turn: {game[activePlayer].name}</div>
-      <HexGrid width={1000} height={550} viewBox="-65 -50 100 100">
-        <Board updateBoard={updateBoard} board={game.board} />
-        <Objects objects={game.objects} />
-      </HexGrid>
+      <div style={{display: 'flex', flexDirection: 'row'}}>
+        <HexGrid width={700} height={550} viewBox="-80 -50 100 100">
+          <Board
+            updateBoard={updateBoard}
+            board={game.board}
+            onHeroClick={handleHeroClick}
+          />
+          <Objects objects={game.objects} />
+        </HexGrid>
+        {inspectHero && <HeroInfo hero={inspectHero} />}
+      </div>
       <Cards />
-      <button type="button" onClick={endTurn}>
-        End Turn
-      </button>
     </>
   );
 };
