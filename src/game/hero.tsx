@@ -1,25 +1,3 @@
-export const heroes = [
-  'Bird',
-  'Cat',
-  'Cow',
-  'Chimp',
-  'Dino',
-  'Dog',
-  'Frog',
-  'Horse',
-  'Hog',
-  'Kang',
-  'Lion',
-  'Mouse',
-  'Panda',
-  'Pig',
-  'Tort',
-].sort();
-
-export const createHeroBoard = () => {
-  return heroes;
-};
-
 const ACTIVE = 'active';
 const PASSIVE = 'passive';
 const REACTIVE = 'reactive';
@@ -31,8 +9,8 @@ const FACE = 'face';
 const HEART = 'heart';
 const SPADE = 'spade';
 
-export const heroInfo = {
-  Bird: {
+export const heroes = [
+  {
     name: 'Bird',
     hp: 10,
     elements: [],
@@ -120,7 +98,7 @@ export const heroInfo = {
       },
     ],
   },
-  Cat: {
+  {
     name: 'Cat',
     hp: 9,
     elements: [HEART, CLUB],
@@ -206,7 +184,7 @@ export const heroInfo = {
       },
     ],
   },
-  Chimp: {
+  {
     name: 'Chimp',
     hp: 14,
     elements: [CLUB],
@@ -238,20 +216,21 @@ export const heroInfo = {
         description: 'Attack 2 - Range 2',
       },
       {
-        name: 'Drain Health',
+        name: 'Anti Ban Zone',
         type: ACTIVE,
         cost: {
           [ANY]: 0,
           [CLUB]: 0,
           [DIAMOND]: 0,
           [FACE]: 0,
-          [HEART]: 1,
+          [HEART]: 0,
           [SPADE]: 0,
         },
-        description: 'Attack 2 - Heal Self 1 - Range 1',
+        description:
+          'Pick a suit, this suit now counts as any suit for allies until next turn',
       },
       {
-        name: 'Rupture',
+        name: 'X Attack',
         type: ACTIVE,
         cost: {
           [ANY]: 0,
@@ -262,10 +241,10 @@ export const heroInfo = {
           [SPADE]: 0,
         },
         description:
-          'Place a bleed token on an enemy in range 2. They take 2 damage for every hex they move until the end of their next activation',
+          'Attack X - Range 2 - X is the number of cards in your hand',
       },
       {
-        name: '9 Lives',
+        name: 'Scrounge',
         type: PASSIVE,
         cost: {
           [ANY]: 0,
@@ -275,24 +254,25 @@ export const heroInfo = {
           [HEART]: 0,
           [SPADE]: 0,
         },
-        description: 'Reduce all incoming instances of damage to 1',
+        description:
+          'At the beginning of his turn, may replace 1 hand card with the last discarded card',
       },
       {
-        name: 'Lash Out',
+        name: 'Discard Damage',
         type: REACTIVE,
         cost: {
           [ANY]: 0,
-          [CLUB]: 1,
+          [CLUB]: 0,
           [DIAMOND]: 0,
           [FACE]: 0,
           [HEART]: 0,
           [SPADE]: 0,
         },
-        description: 'Deal 1 damage to all enemies in range 2',
+        description: 'Discard 1 card to deal 3 Damage to any enemy',
       },
     ],
   },
-  Cow: {
+  {
     name: 'Cow',
     hp: 14,
     elements: [HEART],
@@ -378,7 +358,13 @@ export const heroInfo = {
       },
     ],
   },
-  Dog: {
+  {
+    name: 'Dino',
+    hp: 12,
+    elements: [],
+    abilities: [],
+  },
+  {
     name: 'Dog',
     hp: 11,
     elements: [],
@@ -463,7 +449,7 @@ export const heroInfo = {
       },
     ],
   },
-  Frog: {
+  {
     name: 'Frog',
     hp: 13,
     elements: [HEART, FACE],
@@ -549,7 +535,95 @@ export const heroInfo = {
       },
     ],
   },
-  Kang: {
+  {
+    name: 'Hog',
+    hp: 16,
+    elements: [SPADE],
+    abilities: [
+      {
+        name: 'Move',
+        type: ACTIVE,
+        cost: {
+          [ANY]: 0,
+          [CLUB]: 0,
+          [DIAMOND]: 0,
+          [FACE]: 0,
+          [HEART]: 0,
+          [SPADE]: 0,
+        },
+        description: 'Move 3',
+      },
+      {
+        name: 'Discard Rage',
+        type: ACTIVE,
+        cost: {
+          [ANY]: 0,
+          [CLUB]: 0,
+          [DIAMOND]: 0,
+          [FACE]: 0,
+          [HEART]: 0,
+          [SPADE]: 0,
+        },
+        description: 'Discard 1 card to gain 2 Rage',
+      },
+      {
+        name: 'Attack',
+        type: ACTIVE,
+        cost: {
+          [ANY]: 0,
+          [CLUB]: 0,
+          [DIAMOND]: 0,
+          [FACE]: 0,
+          [HEART]: 0,
+          [SPADE]: 0,
+        },
+        description: 'Attack 1 + # of Rage Tokens Spent - Range 1',
+      },
+      {
+        name: 'War Path',
+        type: PASSIVE,
+        cost: {
+          [ANY]: 0,
+          [CLUB]: 0,
+          [DIAMOND]: 0,
+          [FACE]: 0,
+          [HEART]: 0,
+          [SPADE]: 0,
+        },
+        description:
+          'When there are 3 rage tokens on Hedgehog, reduce each incoming instance of damage by 1',
+      },
+      {
+        name: 'Generate Rage',
+        type: PASSIVE,
+        cost: {
+          [ANY]: 0,
+          [CLUB]: 0,
+          [DIAMOND]: 0,
+          [FACE]: 0,
+          [HEART]: 0,
+          [SPADE]: 0,
+        },
+        description:
+          'When this unit takes or deals damage, place a rage token on it (up to 3)',
+      },
+      {
+        name: 'Bristles',
+        type: REACTIVE,
+        cost: {
+          [ANY]: 0,
+          [CLUB]: 0,
+          [DIAMOND]: 0,
+          [FACE]: 0,
+          [HEART]: 0,
+          [SPADE]: 1,
+        },
+        description:
+          'Spend X rage tokens to do X damage to all enemies in range 1. (After Action)',
+      },
+    ],
+  },
+  {
     name: 'Kang',
     hp: 10,
     elements: [SPADE, DIAMOND],
@@ -636,7 +710,7 @@ export const heroInfo = {
       },
     ],
   },
-  Lion: {
+  {
     name: 'Lion',
     hp: 10,
     elements: [SPADE, DIAMOND],
@@ -723,7 +797,7 @@ export const heroInfo = {
       },
     ],
   },
-  Mouse: {
+  {
     name: 'Mouse',
     hp: 14,
     elements: [FACE, DIAMOND],
@@ -808,7 +882,7 @@ export const heroInfo = {
       },
     ],
   },
-  Panda: {
+  {
     name: 'Panda',
     hp: 18,
     elements: [SPADE, FACE],
@@ -897,95 +971,7 @@ export const heroInfo = {
       },
     ],
   },
-  Hog: {
-    name: 'Hog',
-    hp: 16,
-    elements: [SPADE],
-    abilities: [
-      {
-        name: 'Move',
-        type: ACTIVE,
-        cost: {
-          [ANY]: 0,
-          [CLUB]: 0,
-          [DIAMOND]: 0,
-          [FACE]: 0,
-          [HEART]: 0,
-          [SPADE]: 0,
-        },
-        description: 'Move 3',
-      },
-      {
-        name: 'Discard Rage',
-        type: ACTIVE,
-        cost: {
-          [ANY]: 0,
-          [CLUB]: 0,
-          [DIAMOND]: 0,
-          [FACE]: 0,
-          [HEART]: 0,
-          [SPADE]: 0,
-        },
-        description: 'Discard 1 card to gain 2 Rage',
-      },
-      {
-        name: 'Attack',
-        type: ACTIVE,
-        cost: {
-          [ANY]: 0,
-          [CLUB]: 0,
-          [DIAMOND]: 0,
-          [FACE]: 0,
-          [HEART]: 0,
-          [SPADE]: 0,
-        },
-        description: 'Attack 1 + # of Rage Tokens Spent - Range 1',
-      },
-      {
-        name: 'War Path',
-        type: PASSIVE,
-        cost: {
-          [ANY]: 0,
-          [CLUB]: 0,
-          [DIAMOND]: 0,
-          [FACE]: 0,
-          [HEART]: 0,
-          [SPADE]: 0,
-        },
-        description:
-          'When there are 3 rage tokens on Hedgehog, reduce each incoming instance of damage by 1',
-      },
-      {
-        name: 'Generate Rage',
-        type: PASSIVE,
-        cost: {
-          [ANY]: 0,
-          [CLUB]: 0,
-          [DIAMOND]: 0,
-          [FACE]: 0,
-          [HEART]: 0,
-          [SPADE]: 0,
-        },
-        description:
-          'When this unit takes or deals damage, place a rage token on it (up to 3)',
-      },
-      {
-        name: 'Bristles',
-        type: REACTIVE,
-        cost: {
-          [ANY]: 0,
-          [CLUB]: 0,
-          [DIAMOND]: 0,
-          [FACE]: 0,
-          [HEART]: 0,
-          [SPADE]: 1,
-        },
-        description:
-          'Spend X rage tokens to do X damage to all enemies in range 1. (After Action)',
-      },
-    ],
-  },
-  Pig: {
+  {
     name: 'Pig',
     hp: 14,
     elements: [HEART],
@@ -1072,4 +1058,92 @@ export const heroInfo = {
       },
     ],
   },
-};
+  {
+    name: 'Tort',
+    hp: 16,
+    elements: [SPADE, FACE],
+    abilities: [
+      {
+        name: 'Move',
+        type: ACTIVE,
+        cost: {
+          [ANY]: 1,
+          [CLUB]: 0,
+          [DIAMOND]: 0,
+          [FACE]: 0,
+          [HEART]: 0,
+          [SPADE]: 0,
+        },
+        description: 'Move 3',
+      },
+      {
+        name: 'Multi-Attack',
+        type: ACTIVE,
+        cost: {
+          [ANY]: 1,
+          [CLUB]: 0,
+          [DIAMOND]: 0,
+          [FACE]: 0,
+          [HEART]: 0,
+          [SPADE]: 0,
+        },
+        description: 'Attack 2 all enemies in range 1',
+      },
+      {
+        name: 'Hook',
+        type: ACTIVE,
+        cost: {
+          [ANY]: 0,
+          [CLUB]: 0,
+          [DIAMOND]: 0,
+          [FACE]: 0,
+          [HEART]: 0,
+          [SPADE]: 1,
+        },
+        description: 'Attack 2 - Range 3 - Pull',
+      },
+      {
+        name: 'Taunt',
+        type: ACTIVE,
+        cost: {
+          [ANY]: 0,
+          [CLUB]: 0,
+          [DIAMOND]: 0,
+          [FACE]: 1,
+          [HEART]: 0,
+          [SPADE]: 0,
+        },
+        description:
+          "Place a taunt token on all enemies in range 1. Taunted enemies may not target this unit's allies unless the attack also targts this unit",
+      },
+      {
+        name: 'Attack of Opportunity',
+        type: PASSIVE,
+        cost: {
+          [ANY]: 0,
+          [CLUB]: 0,
+          [DIAMOND]: 0,
+          [FACE]: 0,
+          [HEART]: 0,
+          [SPADE]: 0,
+        },
+        description:
+          'Deal 2 damage to any enemy unit that leaves range 1 of this unit ',
+      },
+      {
+        name: 'Reflection',
+        type: REACTIVE,
+        cost: {
+          [ANY]: 0,
+          [CLUB]: 0,
+          [DIAMOND]: 0,
+          [FACE]: 0,
+          [HEART]: 0,
+          [SPADE]: 1,
+        },
+        description:
+          'Both you and your attacker take all effects of the attack (after action)',
+      },
+    ],
+  },
+];

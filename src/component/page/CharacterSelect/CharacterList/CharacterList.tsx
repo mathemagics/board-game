@@ -5,6 +5,7 @@ import {Label, SpacedContent} from 'component/base';
 import {CharacterCard, CHARACTER_TYPE} from '../CharacterCard';
 
 // TODO dont' add drop handlers if no onDrop
+// TODO ename Character -> Hero
 export const CharacterList = ({characters, label, onDrop, type}) => {
   const [_, drop] = useDrop({
     accept: CHARACTER_TYPE,
@@ -20,7 +21,11 @@ export const CharacterList = ({characters, label, onDrop, type}) => {
       <Label>{label}</Label>
       <SpacedContent ref={drop} header={2}>
         {characters.map(character => (
-          <CharacterCard key={character} character={character} type={type} />
+          <CharacterCard
+            key={character.name}
+            character={character}
+            type={type}
+          />
         ))}
       </SpacedContent>
     </SpacedContent>

@@ -14,7 +14,7 @@ export const CharacterCard = props => {
   });
   return (
     <div ref={drag} {...props}>
-      {character}
+      {character.name}
     </div>
   );
 };

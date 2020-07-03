@@ -13,6 +13,7 @@ import {Container} from './Card.style';
 export const Card = React.forwardRef(({children, suit, ...rest}, ref) => {
   let Icon;
   let color;
+  // TODO dedupe this with ability costs
   switch (suit) {
     case 'diamond':
       Icon = GiCutDiamond;

@@ -14,7 +14,7 @@ export const CharacterSelect = () => {
   const {uid} = useSelector(selectMyPlayer);
   const {player1, player2, heroes, activePlayer} = game;
 
-  const onDrop = character => dispatch(chooseHero(character));
+  const onDrop = hero => dispatch(chooseHero(hero));
 
   if (player1.heroes.length === 3 && player2.heroes.length === 3) {
     return <Redirect to="/board" />;

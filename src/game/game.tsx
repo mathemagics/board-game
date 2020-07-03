@@ -1,7 +1,7 @@
 import {createBoard} from './board';
 import {createDeck} from './card';
 import {createPlayer} from './player';
-import {createHeroBoard} from './hero';
+import {heroes} from './hero';
 import {createObjectBoard} from './object';
 
 const PLAYER_ONE = 'player1';
@@ -16,7 +16,6 @@ export const GAME_PHASES = {
 export const createGame = ({userID, name}) => {
   const board = createBoard();
   const [deck, pool] = createDeck();
-  const heroes = createHeroBoard();
   const objects = createObjectBoard();
   const player = createPlayer({userID, name});
 

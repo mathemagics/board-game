@@ -2,8 +2,7 @@ import {createSelector} from 'reselect';
 
 import {createPlayer} from 'game/player';
 import {createGame} from 'game/game';
-
-import {heroInfo} from 'game/hero';
+import {heroes as heroPool} from 'game/hero';
 
 // Actions
 const SET_ACTIVE_GAME = 'SET_ACTIVE_GAME';
@@ -49,9 +48,8 @@ export const selectActiveGame = state => {
   return activeGame && data.games && data.games[activeGame];
 };
 
-export const selectInspectHero = state => {
-  return heroInfo[state.game.inspectHero];
-};
+export const selectInspectHero = state =>
+  heroPool.filter(hero => hero.name === state.game.inspectHero)[0];
 
 export const selectPlayer1 = createSelector(
   selectActiveGame,
@@ -144,12 +142,12 @@ export const initializeBoard = () => {
 
     // TODO: need a much better implementation of this
     const newBoard = [...board];
-    newBoard[51] = {...newBoard[51], text: player1Heroes[0]};
-    newBoard[61] = {...newBoard[61], text: player1Heroes[1]};
-    newBoard[70] = {...newBoard[70], text: player1Heroes[2]};
-    newBoard[12] = {...newBoard[12], text: player2Heroes[0]};
-    newBoard[20] = {...newBoard[20], text: player2Heroes[1]};
-    newBoard[29] = {...newBoard[29], text: player2Heroes[2]};
+    newBoard[51] = {...newBoard[51], text: player1Heroes[0].name};
+    newBoard[61] = {...newBoard[61], text: player1Heroes[1].name};
+    newBoard[70] = {...newBoard[70], text: player1Heroes[2].name};
+    newBoard[12] = {...newBoard[12], text: player2Heroes[0].name};
+    newBoard[20] = {...newBoard[20], text: player2Heroes[1].name};
+    newBoard[29] = {...newBoard[29], text: player2Heroes[2].name};
     return dispatch(updateGame({board: newBoard}));
   };
 };
@@ -187,7 +185,7 @@ export const chooseHero = chosenHero => (dispatch, getState) => {
 
     dispatch(
       updateGame({
-        heroes: heroes.filter(hero => hero !== chosenHero),
+        heroes: heroes.filter(hero => hero.name !== chosenHero.name),
         [`${key}.heroes`]: [...myHeroes, chosenHero],
         activePlayer: nextPlayer,
       })
