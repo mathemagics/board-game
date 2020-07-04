@@ -1,12 +1,14 @@
 import * as React from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import {HexGrid} from 'react-hexgrid';
+import {HexGrid, HexUtils} from 'react-hexgrid';
+import {debounce} from 'debounce';
 
 import {Board} from './Board';
 import {Cards} from './Cards';
 import {HeroInfo} from './HeroInfo';
 import {HitPoints} from './HitPoints';
 import {Objects} from './Objects';
+import {KillZone} from './KillZone';
 
 import {
   initializeBoard,
@@ -14,6 +16,7 @@ import {
   selectInspectHero,
   selectActiveGame,
   updateGame,
+  updateHitPoints,
 } from '../Game/GameDuck';
 
 export const GameBoard = () => {
@@ -29,14 +32,25 @@ export const GameBoard = () => {
     dispatch(setInspectHero(hero));
   };
 
-  const handleUpdateHitPoints = (hero, hitPoints) => {
+  const handleUpdateHitPoints = debounce((hero, hitPoints) => {
     dispatch(updateHitPoints(hero, hitPoints));
-  };
+  }, 250);
 
   React.useEffect(() => {
     // TODO add gameState for post-initialization to not accidentally do this twice
     dispatch(initializeBoard());
   }, []);
+
+  const onKill = (event, source, targetProps) => {
+    const hexas = board.map(hex => {
+      const result = {...hex};
+      if (HexUtils.equals(targetProps.data, hex)) {
+        result.text = null;
+      }
+      return result;
+    });
+    updateBoard(hexas);
+  };
 
   return (
     <>
@@ -48,6 +62,7 @@ export const GameBoard = () => {
             onHeroClick={handleHeroClick}
           />
           <Objects objects={objects} />
+          <KillZone onDrop={onKill} />
         </HexGrid>
         <div style={{fontSize: 14}}>
           <HitPoints

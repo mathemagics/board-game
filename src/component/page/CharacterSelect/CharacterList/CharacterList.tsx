@@ -6,7 +6,13 @@ import {CharacterCard, CHARACTER_TYPE} from '../CharacterCard';
 
 // TODO dont' add drop handlers if no onDrop
 // TODO ename Character -> Hero
-export const CharacterList = ({characters, label, onDrop, type}) => {
+export const CharacterList = ({
+  characters,
+  label,
+  onDrop,
+  type,
+  onHeroClick,
+}) => {
   const [_, drop] = useDrop({
     accept: CHARACTER_TYPE,
     canDrop: ({from}) => from === 'heroes',
@@ -25,6 +31,7 @@ export const CharacterList = ({characters, label, onDrop, type}) => {
             key={character.name}
             character={character}
             type={type}
+            onClick={onHeroClick}
           />
         ))}
       </SpacedContent>

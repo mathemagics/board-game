@@ -12,7 +12,7 @@ export const Objects = ({objects}) => {
       size={{x: 6, y: 6}}
       flat={false}
       spacing={1.01}
-      origin={{x: 20, y: 20}}
+      origin={{x: 12, y: -30}}
     >
       {objects.map((hex, i) => (
         <Hexagon

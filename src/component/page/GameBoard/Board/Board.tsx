@@ -8,6 +8,7 @@ export const Board = ({board, updateBoard, onHeroClick}) => {
 
   const onDrop = React.useCallback(
     (event, source, targetProps) => {
+      console.log('Board onDropping');
       if (targetProps.data.new) {
         const hexas = board.map(hex => {
           const result = {...hex};
@@ -61,7 +62,7 @@ export const Board = ({board, updateBoard, onHeroClick}) => {
         if (HexUtils.equals(source.state.hex, hex)) {
           result.text = null;
         }
-        if (HexUtils.equals(next.hex, hex)) {
+        if (next && HexUtils.equals(next.hex, hex)) {
           result.text = next.text;
         }
         return result;
@@ -71,17 +72,6 @@ export const Board = ({board, updateBoard, onHeroClick}) => {
     },
     [board, next]
   );
-
-  const onDoubleClick = (event, source) => {
-    const hexas = board.map(hex => {
-      const result = {...hex};
-      if (HexUtils.equals(source.state.hex, hex)) {
-        result.text = null;
-      }
-      return result;
-    });
-    updateBoard(hexas);
-  };
 
   return (
     <Map
@@ -97,8 +87,7 @@ export const Board = ({board, updateBoard, onHeroClick}) => {
           (hex.r === 5 && hex.q < 0 && hex.q > -5) ||
           (hex.r === 4 && hex.q < 0 && hex.q > -4);
 
-        const drawing =
-          (hex.q === -2 && hex.r === 0) || (hex.q === 2 && hex.r === 0);
+        const drawing = hex.q === 0 && hex.r === 0 && hex.s === 0;
         return (
           <Hex
             starting={starting}

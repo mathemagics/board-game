@@ -192,3 +192,19 @@ export const chooseHero = chosenHero => (dispatch, getState) => {
     );
   }
 };
+
+export const updateHitPoints = (hero, hp) => (dispatch, getState) => {
+  const state = getState();
+  const {heroes, key} = selectMyPlayer(state);
+  const heroIndex = heroes.findIndex(aHero => aHero.name === hero.name);
+  if (heroIndex >= 0) {
+    const myHeroes = [...heroes];
+    const myHero = myHeroes[heroIndex];
+    myHeroes[heroIndex] = {...myHero, hp};
+    dispatch(
+      updateGame({
+        [`${key}.heroes`]: myHeroes,
+      })
+    );
+  }
+};

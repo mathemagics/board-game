@@ -9,10 +9,11 @@ import {
 } from 'react-icons/gi';
 import {FaUndo} from 'react-icons/fa';
 
+// TODO this should probably have its own container
 // TODO this code is garbage and duplicated in Card
 const Ability = ({ability}) => (
   <div style={{marginBottom: 12}}>
-    <div>
+    <div style={{marginBottom: 4}}>
       <span style={{fontWeight: 700, marginRight: 8}}>{ability.name}</span>
       {Object.keys(ability.cost).map(cost => {
         let Icon;
