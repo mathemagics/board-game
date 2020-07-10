@@ -3,12 +3,10 @@ import {Layout, Hexagon} from 'react-hexgrid';
 
 const DEFAULT_COLOR = '#15788c';
 const STARTING_COLOR = '#59ACC2';
-const DRAW_COLOR = '#25B49A';
 
 export const Hex = styled(Hexagon)`
   background: white;
-  fill: ${({starting, drawing}) =>
-    starting ? STARTING_COLOR : drawing ? DRAW_COLOR : DEFAULT_COLOR};
+  fill: ${({starting}) => (starting ? STARTING_COLOR : DEFAULT_COLOR)};
 `;
 
 export const Map = styled(Layout)`

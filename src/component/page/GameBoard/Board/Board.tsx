@@ -4,25 +4,21 @@ import {Text, HexUtils} from 'react-hexgrid';
 import {Map, Hex} from './Board.styles';
 
 export const Board = ({board, updateBoard, onHeroClick}) => {
-  const [next, setNext] = React.useState();
-
   const onDrop = React.useCallback(
     (event, source, targetProps) => {
-      console.log('Board onDropping');
-      if (targetProps.data.new) {
-        const hexas = board.map(hex => {
-          const result = {...hex};
-          if (HexUtils.equals(source.state.hex, hex)) {
-            result.text = targetProps.data.text;
-          }
-          return result;
-        });
-
-        updateBoard(hexas);
-      }
-      setNext({hex: source.state.hex, text: targetProps.data.text});
+      const hexas = board.map(hex => {
+        const result = {...hex};
+        if (HexUtils.equals(source.state.hex, hex)) {
+          result.text = targetProps.data.text;
+        }
+        if (HexUtils.equals(targetProps.data, hex) && !targetProps.data.new) {
+          result.text = null;
+        }
+        return result;
+      });
+      updateBoard(hexas);
     },
-    [board, next]
+    [board]
   );
 
   const onDragStart = React.useCallback((event, source) => {
@@ -34,16 +30,8 @@ export const Board = ({board, updateBoard, onHeroClick}) => {
 
   const onDragOver = React.useCallback(
     (event, source) => {
-      // Find blocked hexagons by their 'blocked' attribute
-      const blockedHexas = board.filter(h => h.blocked);
-      // Find if this hexagon is listed in blocked ones
-      const blocked = blockedHexas.find(blockedHex =>
-        HexUtils.equals(source.state.hex, blockedHex)
-      );
-
       const {text} = source.props.data;
-      // Allow drop, if not blocked and there's no content already
-      if (!blocked && !text) {
+      if (!text) {
         // Call preventDefault if you want to allow drop
         event.preventDefault();
       }
@@ -51,27 +39,7 @@ export const Board = ({board, updateBoard, onHeroClick}) => {
     [board]
   );
 
-  const onDragEnd = React.useCallback(
-    (event, source, success) => {
-      if (!success) {
-        return;
-      }
-
-      const hexas = board.map(hex => {
-        const result = {...hex};
-        if (HexUtils.equals(source.state.hex, hex)) {
-          result.text = null;
-        }
-        if (next && HexUtils.equals(next.hex, hex)) {
-          result.text = next.text;
-        }
-        return result;
-      });
-
-      updateBoard(hexas);
-    },
-    [board, next]
-  );
+  const onDragEnd = React.useCallback((event, source, success) => {});
 
   return (
     <Map
@@ -87,11 +55,9 @@ export const Board = ({board, updateBoard, onHeroClick}) => {
           (hex.r === 5 && hex.q < 0 && hex.q > -5) ||
           (hex.r === 4 && hex.q < 0 && hex.q > -4);
 
-        const drawing = hex.q === 0 && hex.r === 0 && hex.s === 0;
         return (
           <Hex
             starting={starting}
-            drawing={drawing}
             key={i}
             q={hex.q}
             r={hex.r}

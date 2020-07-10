@@ -268,7 +268,8 @@ export const heroes = [
           [HEART]: 0,
           [SPADE]: 0,
         },
-        description: 'Discard 1 card to deal 3 Damage to any enemy',
+        description:
+          'Discard 1 card to deal 3 Damage to any enemy in range 3 (After Action)',
       },
     ],
   },
@@ -341,7 +342,7 @@ export const heroes = [
           [SPADE]: 0,
         },
         description:
-          'May pass through units and terrain, dealing 2 damage to enemies passed through',
+          'May pass through units and terrain, dealing 2 damage to heroes passed through',
       },
       {
         name: 'Move React',
@@ -393,7 +394,7 @@ export const heroes = [
           [HEART]: 0,
           [SPADE]: 1,
         },
-        description: 'Attack 2 all enemies in a straight line',
+        description: 'Attack 2 all heroes in a straight line',
       },
       {
         name: 'All Resource Attack',
@@ -619,7 +620,7 @@ export const heroes = [
           [SPADE]: 1,
         },
         description:
-          'Spend X rage tokens to do X damage to all enemies in range 1. (After Action)',
+          'Do 1 damage for every rage token to all enemies in range 1. (After Action)',
       },
     ],
   },

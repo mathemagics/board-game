@@ -148,6 +148,13 @@ export const initializeBoard = () => {
     newBoard[12] = {...newBoard[12], text: player2Heroes[0].name};
     newBoard[20] = {...newBoard[20], text: player2Heroes[1].name};
     newBoard[29] = {...newBoard[29], text: player2Heroes[2].name};
+
+    newBoard[19] = {...newBoard[19], text: 'D1'};
+    newBoard[38] = {...newBoard[38], text: 'D2'};
+
+    newBoard[52] = {...newBoard[52], text: 'R1'};
+    newBoard[71] = {...newBoard[71], text: 'R2'};
+
     return dispatch(updateGame({board: newBoard}));
   };
 };
