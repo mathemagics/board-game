@@ -2,6 +2,21 @@ import {removeCard, drawCard, shuffle, discardCard} from 'game/card';
 
 import {selectActiveGame, selectMyPlayer, updateGame} from './GameDuck';
 
+export const addToReaction = card => (dispatch, getState) => {
+  const state = getState();
+  const {hand, key, reaction} = selectMyPlayer(state);
+
+  const newReaction = [...reaction, card];
+  const newHand = removeCard(card, hand);
+
+  dispatch(
+    updateGame({
+      [`${key}.hand`]: newHand,
+      [`${key}.reaction`]: newReaction,
+    })
+  );
+};
+
 // TODO maybe dedupe with banFromHand
 export const banFromPool = card => (dispatch, getState) => {
   const game = selectActiveGame(getState());
@@ -151,6 +166,21 @@ export const drawFromDiscard = () => (dispatch, getState) => {
   const newDiscard = discard.slice(0, discard.length - 1);
 
   return dispatch(updateGame({[`${key}.hand`]: newHand, discard: newDiscard}));
+};
+
+export const removeFromReaction = card => (dispatch, getState) => {
+  const state = getState();
+  const {hand, key, reaction} = selectMyPlayer(state);
+
+  const newHand = [...hand, card];
+  const newReaction = removeCard(card, reaction);
+
+  dispatch(
+    updateGame({
+      [`${key}.hand`]: newHand,
+      [`${key}.reaction`]: newReaction,
+    })
+  );
 };
 
 export const swapHandAndPool = ({handCard, poolCard}) => (

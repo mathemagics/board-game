@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 // TODO style this properly
-const HitPointInput = ({label, value, onChange}) => (
+const HitPointInput = ({label, max, value, onChange}) => (
   <div
     style={{
       display: 'flex',
@@ -22,7 +22,7 @@ const HitPointInput = ({label, value, onChange}) => (
       onChange={onChange}
       placeholder={value}
     />
-    <span style={{marginTop: 4}}>{value}</span>
+    <span style={{marginTop: 4}}>{`${value}`}</span>
   </div>
 );
 

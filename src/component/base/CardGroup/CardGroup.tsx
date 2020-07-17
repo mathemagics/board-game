@@ -6,7 +6,7 @@ import {Container, Cards} from './CardGroup.style';
 import {ElementCard} from '../ElementCard';
 
 export const CardGroup = React.forwardRef(
-  ({cards, label, name, isSorted, onCardDoubleClick = () => {}}, ref) => {
+  ({cards = [], label, name, isSorted, onCardDoubleClick = () => {}}, ref) => {
     const orderedCards = isSorted ? cards.slice().sort() : cards;
 
     return (

@@ -9,15 +9,17 @@ export const Container = styled.div`
 `;
 
 export const ChildElement = styled.div`
-  ${({isHeader, isTrailer, header, trailer, space, horizontal}) => {
+  ${({isHeader, isTrailer, grow, header, trailer, space, horizontal}) => {
     const before = isHeader ? header : space / 2;
     const after = isTrailer ? trailer : space / 2;
     return horizontal
       ? css`
+          ${grow && 'flex-grow: 1'};
           padding-left: ${before * 8}px;
           padding-right: ${after * 8}px;
         `
       : css`
+          ${grow && 'flex-grow: 1'};
           padding-top: ${before * 8}px;
           padding-bottom: ${after * 8}px;
         `;

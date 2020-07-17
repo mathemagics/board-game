@@ -6,6 +6,7 @@ import {Card, CardGroup, DnDFrame, Label, SpacedContent} from 'component/base';
 import {BanPile} from '../BanPile';
 import {DiscardPile} from '../DiscardPile';
 import {PoolPile} from '../PoolPile';
+import {ReactionPile} from '../ReactionPile';
 
 import {
   selectActiveGame,
@@ -14,6 +15,7 @@ import {
 } from '../../Game/GameDuck';
 
 import {
+  addToReaction,
   banFromHand,
   banFromPool,
   cycleFromHand,
@@ -21,6 +23,7 @@ import {
   discardFromHand,
   drawFromDeck,
   drawFromDiscard,
+  removeFromReaction,
   swapHandAndPool,
 } from '../../Game/CardDuck';
 
@@ -31,10 +34,11 @@ export const Cards = () => {
   const {deck, discard, pool, banned} = game;
 
   const myPlayer = useSelector(selectMyPlayer);
-  const {hand} = myPlayer;
+  const {hand, reaction} = myPlayer;
 
   const enemy = useSelector(selectEnemyPlayer);
   const opponentHand = enemy.hand;
+  const opponentReaction = enemy.reaction;
 
   // TODO move the card code into game/card move actions into actions file
   const handleBan = ({suit, from}) => {
@@ -49,12 +53,12 @@ export const Cards = () => {
     dispatch(discardFromHand(card));
   };
 
-  const handleHandClick = card => {
-    dispatch(cycleFromHand(card));
-  };
-
   const handleDraw = () => {
     dispatch(drawFromDeck());
+  };
+
+  const handleHandClick = card => {
+    dispatch(cycleFromHand(card));
   };
 
   const handlePoolDraw = card => {
@@ -65,12 +69,20 @@ export const Cards = () => {
     dispatch(swapHandAndPool({handCard, poolCard}));
   };
 
+  const handleReactionDrop = card => {
+    dispatch(addToReaction(card));
+  };
+
+  const handleReactionRemove = card => {
+    dispatch(removeFromReaction(card));
+  };
+
   const handleTakeDiscard = () => {
     dispatch(drawFromDiscard());
   };
 
   return (
-    <DnDFrame style={{width: 675, height: 120}}>
+    <DnDFrame style={{width: 675, height: 230}}>
       <SpacedContent header={2}>
         <SpacedContent horizontal space={3}>
           <SpacedContent horizontal space={1} center>
@@ -88,18 +100,31 @@ export const Cards = () => {
             onCardDoubleClick={handleTakeDiscard}
           />
           <BanPile card={banned} onDrop={handleBan} />
+        </SpacedContent>
+        <SpacedContent horizontal space={3}>
           <SpacedContent horizontal space={1} center>
-            <Label>Enemy:</Label>
+            <Label>Enemy Hand:</Label>
             <Card>{opponentHand.length}</Card>
           </SpacedContent>
+          <SpacedContent horizontal space={1} center>
+            <Label>Enemy Reaction:</Label>
+            <Card>{opponentReaction.length}</Card>
+          </SpacedContent>
         </SpacedContent>
-        <SpacedContent horizontal space={2}>
+        <SpacedContent grow horizontal space={2}>
           <CardGroup
             name="hand"
-            label="Hand:"
+            label="Action:"
             cards={hand}
             isSorted
             onCardDoubleClick={handleHandClick}
+          />
+        </SpacedContent>
+        <SpacedContent grow horizontal space={2}>
+          <ReactionPile
+            onDrop={handleReactionDrop}
+            onCardDoubleClick={handleReactionRemove}
+            reaction={reaction}
           />
         </SpacedContent>
       </SpacedContent>
