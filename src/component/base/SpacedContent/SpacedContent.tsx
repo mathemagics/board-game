@@ -2,7 +2,20 @@ import * as React from 'react';
 
 import {Container, ChildElement} from './SpacedContent.style';
 
-export const SpacedContent = React.forwardRef(
+interface SpacedContentProps {
+  children: React.ReactNode;
+  center?: boolean;
+  grow?: boolean;
+  header?: number;
+  horizontal?: boolean;
+  space?: number;
+  trailer?: number;
+}
+
+export const SpacedContent = React.forwardRef<
+  HTMLDivElement,
+  SpacedContentProps
+>(
   (
     {center, children, grow, header = 0, trailer = 0, space = 2, horizontal},
     ref

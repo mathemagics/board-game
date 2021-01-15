@@ -2,6 +2,8 @@ import * as React from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {Redirect} from 'react-router-dom';
 
+import {Hero} from 'game/hero';
+
 import {DnDFrame, SpacedContent} from 'component/base';
 
 import {CharacterList} from './CharacterList';
@@ -23,11 +25,11 @@ export const CharacterSelect = () => {
   const {uid} = useSelector(selectMyPlayer);
   const {player1, player2, heroes, activePlayer} = game;
 
-  const handleHeroClick = hero => {
+  const handleHeroClick = (hero: string) => {
     dispatch(setInspectHero(hero));
   };
 
-  const onDrop = hero => dispatch(chooseHero(hero));
+  const onDrop = (hero: Hero) => dispatch(chooseHero(hero));
 
   if (player1.heroes.length === 3 && player2.heroes.length === 3) {
     return <Redirect to="/board" />;

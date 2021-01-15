@@ -3,6 +3,8 @@ import {useSelector, useDispatch} from 'react-redux';
 import {HexGrid, HexUtils} from 'react-hexgrid';
 import {debounce} from 'debounce';
 
+import {Hero} from 'game/hero';
+
 import {Board} from './Board';
 import {Cards} from './Cards';
 import {HeroInfo} from './HeroInfo';
@@ -28,11 +30,11 @@ export const GameBoard = () => {
     dispatch(updateGame({board: newBoard}));
   };
 
-  const handleHeroClick = hero => {
+  const handleHeroClick = (hero: Hero) => {
     dispatch(setInspectHero(hero));
   };
 
-  const handleUpdateHitPoints = debounce((hero, hitPoints) => {
+  const handleUpdateHitPoints = debounce((hero: Hero, hitPoints: number) => {
     dispatch(updateHitPoints(hero, hitPoints));
   }, 250);
 

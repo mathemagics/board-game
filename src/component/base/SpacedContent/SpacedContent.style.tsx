@@ -1,6 +1,12 @@
 import styled, {css} from 'styled-components';
 
-export const Container = styled.div`
+interface ContainerProps {
+  horizontal: boolean;
+  center: boolean;
+  ref: React.Ref<HTMLDivElement>;
+}
+
+export const Container = styled.div<ContainerProps>`
   display: flex;
   flex-direction: ${({horizontal}) => (horizontal ? 'row' : 'column')};
   align-items: ${({center}) => (center ? 'center' : 'stretch')};
@@ -8,7 +14,17 @@ export const Container = styled.div`
   width: 100%;
 `;
 
-export const ChildElement = styled.div`
+interface ChildElementProps {
+  grow: boolean;
+  header: number;
+  horizontal: boolean;
+  isHeader: boolean;
+  isTrailer: boolean;
+  space: number;
+  trailer: number;
+}
+
+export const ChildElement = styled.div<ChildElementProps>`
   ${({isHeader, isTrailer, grow, header, trailer, space, horizontal}) => {
     const before = isHeader ? header : space / 2;
     const after = isTrailer ? trailer : space / 2;

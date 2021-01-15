@@ -1,15 +1,44 @@
-const ACTIVE = 'active';
-const PASSIVE = 'passive';
-const REACTIVE = 'reactive';
+import {SUITS, Card} from './card';
+
+const ABILITYTYPES = {
+  ACTIVE: 'active',
+  PASSIVE: 'passive',
+  REACTIVE: 'reactive',
+};
+
+type AbilityTypeKeys = keyof typeof ABILITYTYPES;
+type AbilityType = typeof ABILITYTYPES[AbilityTypeKeys];
+
+const {ACTIVE, PASSIVE, REACTIVE} = ABILITYTYPES;
 
 const ANY = 'any';
-const CLUB = 'club';
-const DIAMOND = 'diamond';
-const FACE = 'face';
-const HEART = 'heart';
-const SPADE = 'spade';
+const {CLUB, DIAMOND, FACE, HEART, SPADE}: typeof SUITS = SUITS;
 
-export const heroes = [
+export interface AbilityCost {
+  [ANY]: number;
+  [CLUB]: number;
+  [DIAMOND]: number;
+  [FACE]: number;
+  [HEART]: number;
+  [SPADE]: number;
+}
+
+export type CostTypes = keyof AbilityCost;
+export interface Ability {
+  name: string;
+  type: AbilityType;
+  cost: AbilityCost;
+  description: string;
+}
+
+export interface Hero {
+  name: string;
+  hp: number;
+  elements: Card[];
+  abilities: Ability[];
+}
+
+export const heroes: Hero[] = [
   {
     name: 'Bird',
     hp: 10,

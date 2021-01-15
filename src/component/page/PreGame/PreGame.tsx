@@ -19,6 +19,6 @@ export const PreGame = () => {
   return player1 && player2 ? (
     <Redirect to="/character" />
   ) : (
-    'Waiting for opponent...'
+    <div>Waiting for opponent...</div>
   );
 };

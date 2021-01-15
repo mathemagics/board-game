@@ -1,7 +1,7 @@
 import {createBoard} from './board';
-import {createDeck} from './card';
-import {createPlayer} from './player';
-import {heroes} from './hero';
+import {createDeck, Card} from './card';
+import {createPlayer, Player} from './player';
+import {heroes, Hero} from './hero';
 import {createObjectBoard} from './object';
 
 const PLAYER_ONE = 'player1';
@@ -11,9 +11,9 @@ const PLAYER_TWO = 'player2';
 export const GAME_PHASES = {
   character: 'CHARACTER',
   game: 'GAME',
-};
+} as const;
 
-export const createGame = ({userID, name}) => {
+export const createGame = ({userID, name}: {userID: string, name: string}): Game => {
   const board = createBoard();
   const [deck, pool] = createDeck();
   const objects = createObjectBoard();
@@ -23,6 +23,8 @@ export const createGame = ({userID, name}) => {
   const playerKey = isPlayer1 ? PLAYER_ONE : PLAYER_TWO;
 
   return {
+    id: '',
+    players: [],
     activePlayer: PLAYER_ONE,
     board,
     deck,
@@ -35,23 +37,17 @@ export const createGame = ({userID, name}) => {
   };
 };
 
-// TODO Something with all this shit.
-type Card = string;
-type Hero = string;
 type Objects = string;
-type Player = {
-  hand: [Card];
-  heroes: [Hero];
-};
 
-interface Game {
+export interface Game {
+  id: string;
   board: [];
-  deck: [Card];
-  discard: [Card];
-  objects: [Objects];
-  // This is wrong
-  players: [Player];
-  pool: [Card];
-  phase: 'character' | 'game';
+  deck: Card[];
+  discard: Card[];
+  objects: Object[];
+  heroes: Hero[],
+  players: Player[];
+  pool: Card[];
+  phase: typeof GAME_PHASES[keyof typeof GAME_PHASES];
   activePlayer: string;
 }

@@ -1,8 +1,17 @@
-import {removeCard, drawCard, shuffle, discardCard} from 'game/card';
+import {ThunkAction} from 'redux-thunk';
+import {Action} from 'redux';
+
+import {RootState} from 'component/root/createStore';
+import {removeCard, drawCard, shuffle, discardCard, Card} from 'game/card';
 
 import {selectActiveGame, selectMyPlayer, updateGame} from './GameDuck';
 
-export const addToReaction = card => (dispatch, getState) => {
+export const addToReaction = (
+  card: Card
+): ThunkAction<void, RootState, unknown, Action<Card>> => (
+  dispatch,
+  getState
+) => {
   const state = getState();
   const {hand, key, reaction} = selectMyPlayer(state);
 
@@ -18,7 +27,12 @@ export const addToReaction = card => (dispatch, getState) => {
 };
 
 // TODO maybe dedupe with banFromHand
-export const banFromPool = card => (dispatch, getState) => {
+export const banFromPool = (
+  card: Card
+): ThunkAction<void, RootState, unknown, Action<Card>> => (
+  dispatch,
+  getState
+) => {
   const game = selectActiveGame(getState());
   const {banned, deck, discard, pool} = game;
   const remainingPool = removeCard(card, pool);
@@ -46,7 +60,12 @@ export const banFromPool = card => (dispatch, getState) => {
   }
 };
 
-export const banFromHand = card => (dispatch, getState) => {
+export const banFromHand = (
+  card: Card
+): ThunkAction<void, RootState, unknown, Action<Card>> => (
+  dispatch,
+  getState
+) => {
   const state = getState();
   const {banned, deck, discard} = selectActiveGame(state);
   const {hand, key} = selectMyPlayer(state);
@@ -75,7 +94,12 @@ export const banFromHand = card => (dispatch, getState) => {
   }
 };
 
-export const cycleFromHand = card => (dispatch, getState) => {
+export const cycleFromHand = (
+  card: Card
+): ThunkAction<void, RootState, unknown, Action<Card>> => (
+  dispatch,
+  getState
+) => {
   const state = getState();
   const {deck, discard} = selectActiveGame(state);
   const {hand, key} = selectMyPlayer(state);
@@ -97,7 +121,12 @@ export const cycleFromHand = card => (dispatch, getState) => {
   );
 };
 
-export const cycleFromPool = card => (dispatch, getState) => {
+export const cycleFromPool = (
+  card: Card
+): ThunkAction<void, RootState, unknown, Action<Card>> => (
+  dispatch,
+  getState
+) => {
   const {pool, deck, discard} = selectActiveGame(getState());
 
   const isDeckEmpty = deck.length === 0;
@@ -118,7 +147,12 @@ export const cycleFromPool = card => (dispatch, getState) => {
   );
 };
 
-export const discardFromHand = card => (dispatch, getState) => {
+export const discardFromHand = (
+  card: Card
+): ThunkAction<void, RootState, unknown, Action<Card>> => (
+  dispatch,
+  getState
+) => {
   const state = getState();
   const {discard} = selectActiveGame(state);
   const {hand, key} = selectMyPlayer(state);
@@ -132,7 +166,12 @@ export const discardFromHand = card => (dispatch, getState) => {
   );
 };
 
-export const drawFromDeck = () => (dispatch, getState) => {
+export const drawFromDeck = (): ThunkAction<
+  void,
+  RootState,
+  unknown,
+  Action
+> => (dispatch, getState) => {
   const state = getState();
   const {deck, discard} = selectActiveGame(state);
   const {hand, key} = selectMyPlayer(state);
@@ -153,7 +192,12 @@ export const drawFromDeck = () => (dispatch, getState) => {
   );
 };
 
-export const drawFromDiscard = () => (dispatch, getState) => {
+export const drawFromDiscard = (): ThunkAction<
+  void,
+  RootState,
+  unknown,
+  Action
+> => (dispatch, getState) => {
   const state = getState();
   const {hand, key} = selectMyPlayer(state);
   const {discard} = selectActiveGame(state);
@@ -165,10 +209,15 @@ export const drawFromDiscard = () => (dispatch, getState) => {
   const newHand = [...hand, discard[discard.length - 1]];
   const newDiscard = discard.slice(0, discard.length - 1);
 
-  return dispatch(updateGame({[`${key}.hand`]: newHand, discard: newDiscard}));
+  dispatch(updateGame({[`${key}.hand`]: newHand, discard: newDiscard}));
 };
 
-export const removeFromReaction = card => (dispatch, getState) => {
+export const removeFromReaction = (
+  card: Card
+): ThunkAction<void, RootState, unknown, Action<Card>> => (
+  dispatch,
+  getState
+) => {
   const state = getState();
   const {hand, key, reaction} = selectMyPlayer(state);
 
@@ -183,10 +232,21 @@ export const removeFromReaction = card => (dispatch, getState) => {
   );
 };
 
-export const swapHandAndPool = ({handCard, poolCard}) => (
-  dispatch,
-  getState
-) => {
+export const swapHandAndPool = ({
+  handCard,
+  poolCard,
+}: {
+  handCard: Card;
+  poolCard: Card;
+}): ThunkAction<
+  void,
+  RootState,
+  unknown,
+  Action<{
+    handCard: Card;
+    poolCard: Card;
+  }>
+> => (dispatch, getState) => {
   const state = getState();
   const {pool} = selectActiveGame(state);
   const {hand, key} = selectMyPlayer(state);

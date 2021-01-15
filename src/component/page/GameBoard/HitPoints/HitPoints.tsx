@@ -1,7 +1,20 @@
 import * as React from 'react';
 
+import {Player} from 'game/player';
+import {Hero} from 'game/hero';
+
+interface HitPointInputProps {
+  label: string;
+  value: number;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
 // TODO style this properly
-const HitPointInput = ({label, max, value, onChange}) => (
+const HitPointInput: React.FC<HitPointInputProps> = ({
+  label,
+  value,
+  onChange,
+}) => (
   <div
     style={{
       display: 'flex',
@@ -20,13 +33,23 @@ const HitPointInput = ({label, max, value, onChange}) => (
       }}
       type="number"
       onChange={onChange}
-      placeholder={value}
+      placeholder={`${value}`}
     />
     <span style={{marginTop: 4}}>{`${value}`}</span>
   </div>
 );
 
-export const HitPoints = ({player1, player2, onUpdate}) => {
+interface HitPointsProps {
+  player1: Player;
+  player2: Player;
+  onUpdate: (hero: Hero, hp: string) => {};
+}
+
+export const HitPoints: React.FC<HitPointsProps> = ({
+  player1,
+  player2,
+  onUpdate,
+}) => {
   return (
     <div style={{display: 'flex', marginBottom: 32}}>
       <div style={{marginRight: 16}}>

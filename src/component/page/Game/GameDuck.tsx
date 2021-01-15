@@ -1,24 +1,41 @@
 import {createSelector} from 'reselect';
-
 import {createPlayer} from 'game/player';
-import {createGame} from 'game/game';
-import {heroes as heroPool} from 'game/hero';
+import {createGame, Game} from 'game/game';
+import {heroes as heroPool, Hero} from 'game/hero';
 
+import {Action} from 'redux';
+import {ThunkAction} from 'redux-thunk';
+import {RootState} from 'component/root/createStore';
 // Actions
 const SET_ACTIVE_GAME = 'SET_ACTIVE_GAME';
 const SET_INSPECT_HERO = 'SET_INSPECT_HERO';
 
+type SetActiveGameType = {
+  type: typeof SET_ACTIVE_GAME;
+  payload: string;
+};
+
+type SetInspectHeroType = {
+  type: typeof SET_INSPECT_HERO;
+  payload: string;
+};
+
+type GameActionType = SetActiveGameType | SetInspectHeroType | {type: ''};
+
 // Action Creators
-export const setActiveGame = gameID => {
+export const setActiveGame = (gameID: string) => {
   return {type: SET_ACTIVE_GAME, payload: gameID};
 };
 
-export const setInspectHero = hero => {
+export const setInspectHero = (hero: string) => {
   return {type: SET_INSPECT_HERO, payload: hero};
 };
 
 // Reducer
-export const gameReducer = (state = {}, action = {}) => {
+export const gameReducer = (
+  state = {},
+  action: GameActionType = {type: ''}
+) => {
   switch (action.type) {
     case SET_ACTIVE_GAME:
       return {...state, activeGame: action.payload};
@@ -36,11 +53,11 @@ const PLAYER_TWO = 'player2';
 
 // Selectors
 
-// TODO: rename activeGme activeGameID
+// TODO: rename activeGame activeGameID
 // TODO: Handle storing activeGameID and activeGame in some normal way
-export const selectActiveGameID = state => state.game.activeGame;
+export const selectActiveGameID = (state: RootState) => state.game.activeGame;
 
-export const selectActiveGame = state => {
+export const selectActiveGame = (state: RootState) => {
   const {
     game: {activeGame},
     firestore: {data},
@@ -48,7 +65,7 @@ export const selectActiveGame = state => {
   return activeGame && data.games && data.games[activeGame];
 };
 
-export const selectInspectHero = state =>
+export const selectInspectHero = (state: RootState) =>
   heroPool.filter(hero => hero.name === state.game.inspectHero)[0];
 
 export const selectPlayer1 = createSelector(
@@ -61,8 +78,9 @@ export const selectPlayer2 = createSelector(
   game => game.player2
 );
 
-export const selectMyID = state => state.firebase.auth.uid;
-export const selectMyName = state => state.firebase.auth.displayName;
+export const selectMyID = (state: RootState) => state.firebase.auth.uid;
+export const selectMyName = (state: RootState) =>
+  state.firebase.auth.displayName;
 
 export const selectActivePlayer = createSelector(
   selectActiveGame,
@@ -97,7 +115,12 @@ export const selectEnemyPlayer = createSelector(
 );
 
 // SideEffects
-export const createNewGame = () => {
+export const createNewGame = (): ThunkAction<
+  void,
+  RootState,
+  unknown,
+  Action
+> => {
   return (dispatch, getState, getFirebase) => {
     const {
       firebase: {
@@ -111,13 +134,15 @@ export const createNewGame = () => {
       .firestore()
       .collection('games')
       .add(newGame)
-      .then(game => {
+      .then((game: Game) => {
         dispatch(setActiveGame(game.id));
       });
   };
 };
 
-export const updateGame = args => {
+export const updateGame = (
+  args
+): ThunkAction<void, RootState, unknown, Action> => {
   return (dispatch, getState, getFirebase) => {
     const {activeGame} = getState().game;
     return getFirebase()
@@ -128,7 +153,12 @@ export const updateGame = args => {
   };
 };
 
-export const initializeBoard = () => {
+export const initializeBoard = (): ThunkAction<
+  void,
+  RootState,
+  unknown,
+  Action
+> => {
   return (dispatch, getState) => {
     const {
       game: {activeGame},
@@ -159,7 +189,7 @@ export const initializeBoard = () => {
   };
 };
 
-export const addPlayer = () => {
+export const addPlayer = (): ThunkAction<void, RootState, unknown, Action> => {
   return (dispatch, getState) => {
     const state = getState();
     const uid = selectMyID(state);
@@ -174,7 +204,7 @@ export const addPlayer = () => {
     const playerKey = player1 ? PLAYER_TWO : PLAYER_ONE;
     const newPlayer = createPlayer({userID: uid, name: displayName});
 
-    return dispatch(
+    dispatch(
       updateGame({
         [playerKey]: {...newPlayer, key: playerKey},
       })
@@ -182,7 +212,9 @@ export const addPlayer = () => {
   };
 };
 
-export const chooseHero = chosenHero => (dispatch, getState) => {
+export const chooseHero = (
+  chosenHero: Hero
+): ThunkAction<void, RootState, unknown, Action> => (dispatch, getState) => {
   const state = getState();
   const {heroes, activePlayer} = selectActiveGame(state);
   const {heroes: myHeroes, key} = selectMyPlayer(state);
@@ -200,7 +232,10 @@ export const chooseHero = chosenHero => (dispatch, getState) => {
   }
 };
 
-export const updateHitPoints = (hero, hp) => (dispatch, getState) => {
+export const updateHitPoints = (
+  hero: Hero,
+  hp: number
+): ThunkAction<void, RootState, unknown, Action> => (dispatch, getState) => {
   const state = getState();
   const {heroes, key} = selectMyPlayer(state);
   const heroIndex = heroes.findIndex(aHero => aHero.name === hero.name);

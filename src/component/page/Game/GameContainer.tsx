@@ -10,7 +10,7 @@ import {GameBoard} from '../GameBoard';
 import {setActiveGame, selectActiveGameID, selectActiveGame} from './GameDuck';
 
 export const Game = () => {
-  const {gameID} = useParams();
+  const {gameID} = useParams<{gameID: string}>();
   const dispatch = useDispatch();
 
   // TODO everythign with aciveGameID

@@ -3,6 +3,8 @@ import {useDispatch, useSelector} from 'react-redux';
 
 import {Card, CardGroup, DnDFrame, Label, SpacedContent} from 'component/base';
 
+import {Card as CardType} from 'game/card';
+
 import {BanPile} from '../BanPile';
 import {DiscardPile} from '../DiscardPile';
 import {PoolPile} from '../PoolPile';
@@ -41,7 +43,7 @@ export const Cards = () => {
   const opponentReaction = enemy.reaction;
 
   // TODO move the card code into game/card move actions into actions file
-  const handleBan = ({suit, from}) => {
+  const handleBan = ({suit, from}: {suit: CardType; from: string}) => {
     if (from === 'pool') {
       dispatch(banFromPool(suit));
     } else if (from === 'hand') {
@@ -49,7 +51,7 @@ export const Cards = () => {
     }
   };
 
-  const handleDiscard = card => {
+  const handleDiscard = (card: CardType) => {
     dispatch(discardFromHand(card));
   };
 
@@ -57,23 +59,26 @@ export const Cards = () => {
     dispatch(drawFromDeck());
   };
 
-  const handleHandClick = card => {
+  const handleHandClick = (card: CardType) => {
     dispatch(cycleFromHand(card));
   };
 
-  const handlePoolDraw = card => {
+  const handlePoolDraw = (card: CardType) => {
     dispatch(cycleFromPool(card));
   };
 
-  const handlePoolDrop = ({suit: handCard}, poolCard) => {
+  const handlePoolDrop = (
+    {suit: handCard}: {suit: CardType},
+    poolCard: CardType
+  ) => {
     dispatch(swapHandAndPool({handCard, poolCard}));
   };
 
-  const handleReactionDrop = card => {
+  const handleReactionDrop = (card: CardType) => {
     dispatch(addToReaction(card));
   };
 
-  const handleReactionRemove = card => {
+  const handleReactionRemove = (card: CardType) => {
     dispatch(removeFromReaction(card));
   };
 

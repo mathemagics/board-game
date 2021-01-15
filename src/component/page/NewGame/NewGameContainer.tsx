@@ -15,6 +15,6 @@ export const NewGame = () => {
   return activeGameID ? (
     <Redirect to={{pathname: `${activeGameID}`}} />
   ) : (
-    'Creating game...'
+    <div>Creating game...</div>
   );
 };

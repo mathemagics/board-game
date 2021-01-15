@@ -1,23 +1,27 @@
-export const HEART = 'heart';
-export const SPADE = 'spade';
-export const DIAMOND = 'diamond';
-export const CLUB = 'club';
-export const FACE = 'face';
+const DECK_SIZE = 10;
 
-const COUNT = 10;
+export const SUITS = {
+  HEART: 'heart',
+  SPADE: 'spade',
+  DIAMOND: 'diamond',
+  CLUB: 'club',
+  FACE: 'face',
+} as const;
 
-const suits = [HEART, SPADE, DIAMOND, CLUB, FACE];
+const suitValues = Object.values(SUITS);
+
+export type Card = typeof suitValues[number];
 
 export const newDeck = () => {
-  return suits.reduce((acc, suit) => {
-    for (let i = 0; i < COUNT; i += 1) {
+  return suitValues.reduce((acc, suit) => {
+    for (let i = 0; i < DECK_SIZE; i += 1) {
       acc.push(suit);
     }
     return acc;
   }, []);
 };
 
-export const shuffle = array => {
+export const shuffle = (array: Card[]) => {
   const count = array.length - 1;
   for (let i = count; i > 0; i -= 1) {
     const j = Math.floor(Math.random() * i);
@@ -35,7 +39,7 @@ export const createDeck = () => {
   return [restDeck, pool];
 };
 
-export const drawCard = deck => {
+export const drawCard = (deck: Card[]) => {
   const randomIndex = Math.floor(Math.random() * deck.length);
   const card = deck[randomIndex];
   const remainingDeck = deck.filter((_item, index) => {
@@ -44,7 +48,15 @@ export const drawCard = deck => {
   return [card, remainingDeck];
 };
 
-export const discardCard = ({card, hand, discard}) => {
+export const discardCard = ({
+  card,
+  hand,
+  discard,
+}: {
+  card: Card;
+  hand: Card[];
+  discard: Card[];
+}) => {
   const newHand = [...hand];
   const index = newHand.indexOf(card);
   if (index > -1) {
@@ -54,5 +66,5 @@ export const discardCard = ({card, hand, discard}) => {
   return [newHand, newDiscard];
 };
 
-export const removeCard = (card, pile) =>
+export const removeCard = (card: Card, pile: Card[]) =>
   pile.filter((_card, index) => pile.indexOf(card) !== index);

@@ -3,15 +3,14 @@ import * as React from 'react';
 import {Hexagon, Text} from 'react-hexgrid';
 import {Map} from './KillZone.style';
 
-// TODO this does not work as intended
-export const KillZone = ({onDrop}) => {
-  const onDragStart = React.useCallback(event => {
-    event.preventDefault();
-  });
+interface KillZoneProps {
+  onDrop: () => void;
+}
 
-  const onDragOver = React.useCallback(event => {
-    event.preventDefault();
-  });
+// TODO this does not work as intended
+export const KillZone: React.FC<KillZoneProps> = ({onDrop}) => {
+  const onDragStart = event => event.preventDefault();
+  const onDragOver = event => event.preventDefault();
 
   return (
     <Map size={{x: 5.5, y: 5.5}} flat={false} origin={{x: 12, y: 35}}>

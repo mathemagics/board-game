@@ -1,9 +1,22 @@
 import * as React from 'react';
 import {Text, HexUtils} from 'react-hexgrid';
 
+import {Hero} from 'game/hero';
+
 import {Map, Hex} from './Board.styles';
 
-export const Board = ({board, updateBoard, onHeroClick}) => {
+interface BoardProps {
+  board: any;
+  // TODO board type
+  updateBoard: (board: any) => void;
+  onHeroClick: (hero: Hero) => void;
+}
+
+export const Board: React.FC<BoardProps> = ({
+  board,
+  updateBoard,
+  onHeroClick,
+}) => {
   const onDrop = React.useCallback(
     (event, source, targetProps) => {
       const hexas = board.map(hex => {
@@ -21,12 +34,12 @@ export const Board = ({board, updateBoard, onHeroClick}) => {
     [board]
   );
 
-  const onDragStart = React.useCallback((event, source) => {
+  const onDragStart = (event, source) => {
     // If this tile is empty, let's disallow drag
     if (!source.props.data.text) {
       event.preventDefault();
     }
-  });
+  };
 
   const onDragOver = React.useCallback(
     (event, source) => {
@@ -39,7 +52,7 @@ export const Board = ({board, updateBoard, onHeroClick}) => {
     [board]
   );
 
-  const onDragEnd = React.useCallback((event, source, success) => {});
+  const onDragEnd = (event, source, success) => {};
 
   return (
     <Map
